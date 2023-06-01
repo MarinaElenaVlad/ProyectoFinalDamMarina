@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 /**
- * AÑADIR EXPLICACION + COMENTARIOS
+ * AÑADIR EXPLICACION + COMENTARIOSs
  */
 public class LoginActivity extends AppCompatActivity {
 
