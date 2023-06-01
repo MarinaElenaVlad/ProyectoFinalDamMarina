@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "581916307954",
+    "project_id": "proyectofinaldammarina",
+    "storage_bucket": "proyectofinaldammarina.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:581916307954:android:1080c773f19591e4637b6b",
+        "android_client_info": {
+          "package_name": "com.example.proyectofinaldammarina"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCrt4s-qkfDn5jJmQi2E0zc4ffYkFNJ6aU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
