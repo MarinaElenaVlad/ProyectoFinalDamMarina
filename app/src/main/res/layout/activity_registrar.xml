@@ -85,16 +85,6 @@
             <!--            que el texto se vea bien en varios moviles!! mejor mas pequeña que se pase de tamaño-->
             <!--            hace falta texto? si quiere volver al login que le de a la flecha, no?-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/registrarRedireccionar"
-                android:text="Volver al login"
-                android:layout_gravity="center"
-                android:padding="8dp"
-                android:layout_marginTop="10dp"
-                android:textColor="@color/black"
-                android:textSize="17sp"/>
 
         </LinearLayout>
 
