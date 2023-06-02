@@ -34,8 +34,7 @@ public class UsuarioDAOImpl implements IUsuarioDAO {
     @Override
     public Usuario insertarUsuario(Usuario usuario, String idNuevoUsuario) {
         database.collection(nombreColeccion).document(idNuevoUsuario)
-                .set(new Usuario(usuario.getNombre(),usuario.getEmail(),
-                        usuario.getPassword(), "cliente"));
+                .set(new Usuario(usuario.getNombre(),usuario.getEmail(), "cliente"));
 
         return null;
     }

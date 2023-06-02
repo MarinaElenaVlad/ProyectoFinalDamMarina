@@ -34,7 +34,9 @@ public class MenuActivity extends AppCompatActivity {
 
 
 /**
- * HACER ESTO EN UNA RAMA APARTE Y LUEGO JUNTARLA, POR SI TE EQUIVOCAS!!
+ * HACER ESTO EN UNA RAMA APARTE Y LUEGO JUNTARLA, POR SI TE EQUIVOCAS, mirar video!!
+ *
+ * USUARIO != NULL, VIDEO !MIRAR !
  */
 
         b.setOnClickListener(new View.OnClickListener() {
@@ -45,6 +47,8 @@ public class MenuActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //ESTAMOS EN LA RAMA DEL MENU
 
     }
 }

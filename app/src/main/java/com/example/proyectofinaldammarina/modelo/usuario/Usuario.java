@@ -23,10 +23,10 @@ public class Usuario {
     /**
      * Constructor con parámetros
      */
-    public Usuario(String nombre, String email, String password, String idRol) {
+    public Usuario(String nombre, String email, String idRol) {
         this.nombre = nombre;
         this.email = email;
-        this.password = password;
+//        this.password = password;
         this.idRol = idRol;
     }
 
@@ -49,13 +49,13 @@ public class Usuario {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+//    public String getPassword() {
+//        return password;
+//    }
+//
+//    public void setPassword(String password) {
+//        this.password = password;
+//    }
 
     public String getIdRol() {
         return idRol;
