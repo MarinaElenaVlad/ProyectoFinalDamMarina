@@ -15,9 +15,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.example.proyectofinaldammarina.modelo.mueble.DAO.MuebleDAOImpl;
+import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -34,6 +45,9 @@ public class MenuActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
+    private FirebaseFirestore db;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +61,7 @@ public class MenuActivity extends AppCompatActivity {
 
         Toast.makeText(MenuActivity.this, firebaseAuth.getUid(), Toast.LENGTH_LONG).show();
 
+        // Cuando se carga el menú la opción "Inicio" está marcada por defecto
         reemplazarFragment(new InicioFragment());
         bottomNavigationView.setBackground(null);
 
