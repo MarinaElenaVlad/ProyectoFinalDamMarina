@@ -3,6 +3,7 @@ package com.example.proyectofinaldammarina;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,6 +27,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ListaFragment extends Fragment {
 
@@ -37,6 +39,8 @@ public class ListaFragment extends Fragment {
     private RecyclerView lista;
     private List<Mueble> muebleList;
     private Adaptador adaptador;
+
+    private SearchView searchView;
 
     public ListaFragment() {
     }
@@ -52,6 +56,21 @@ public class ListaFragment extends Fragment {
         db = FirebaseFirestore.getInstance();
 
         muebleList = new ArrayList<>();
+
+        searchView = root.findViewById(R.id.barraBusquedaLista);
+        searchView.clearFocus();
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                buscarLista(newText);
+                return false;
+            }
+        });
 
         lista = root.findViewById(R.id.RecyclerViewMain);
         lista.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -77,6 +96,38 @@ public class ListaFragment extends Fragment {
         });
 
         return root;
+    }
+
+    private void buscarLista(String textoNuevo){
+        List<Mueble> listaFiltrada = new ArrayList<>();
+
+        /***
+         * PROBLEMAS GET!!
+         */
+        CollectionReference collectionReference = db.collection("muebles");
+        collectionReference.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(Task<QuerySnapshot> task) {
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Mueble mueble = document.toObject(Mueble.class);
+                    if(mueble.getNombre().toLowerCase().contains(textoNuevo.toLowerCase())){
+                        //Se añade el mueble a la lista
+                        listaFiltrada.add(mueble);
+                    }
+                    if(listaFiltrada.isEmpty()){
+                       // Toast.makeText(getContext(), "No hay resultados", Toast.LENGTH_LONG).show();
+                        adaptador.setSearchView(listaFiltrada);//Asi no sale nada en la lista
+                    }else{
+                        adaptador.setSearchView(listaFiltrada);
+                    }
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure( Exception e) {
+                Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_LONG).show();
+            }
+        });
     }
 
 }

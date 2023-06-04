@@ -3,23 +3,33 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@drawable/fondolist"
     tools:context=".ListaFragment">
 
-<!--    &lt;!&ndash; TODO: Update blank fragment layout &ndash;&gt;-->
-<!--    <TextView-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:text="Lista"-->
-<!--        android:textSize="30sp"-->
-<!--        android:gravity="center"-->
-<!--        android:textColor="@color/white"/>-->
+
+    <androidx.appcompat.widget.SearchView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="65dp"
+        android:layout_marginStart="12dp"
+        android:layout_marginEnd="12dp"
+        android:id="@+id/barraBusquedaLista"
+        app:iconifiedByDefault="false"
+        app:searchHintIcon="@null"
+        app:queryHint="Búsqueda..."
+        android:focusable="false"
+        app:closeIcon="@drawable/ic_baseline_clear_24"
+        app:searchIcon="@drawable/ic_baseline_search_24"
+        android:background="@drawable/custom_edittext"
+        />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/RecyclerViewMain"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="105dp"
         android:layout_marginBottom="60dp"
         />
 

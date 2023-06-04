@@ -64,4 +64,14 @@ public class Usuario {
     public void setIdRol(String idRol) {
         this.idRol = idRol;
     }
+
+    @Override
+    public String toString() {
+        return "Usuario{" +
+                "nombre='" + nombre + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", idRol='" + idRol + '\'' +
+                '}';
+    }
 }

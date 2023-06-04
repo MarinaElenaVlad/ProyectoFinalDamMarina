@@ -1,9 +1,154 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".DetalleMuebleActivity">
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DetalleMuebleActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+<!--    cambiar icono toolbar-->
+       <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbarDetalleMueble"
+            android:background="@color/blue"
+            app:logo="@drawable/ic_baseline_local_cafe_24"
+            app:title="Detalle mueble"
+            app:titleMarginStart="30dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/Theme.AppCompat.Light"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+ <EditText
+     android:layout_width="match_parent"
+     android:layout_height="50dp"
+     android:id="@+id/editMueblgfe"
+     android:background="@drawable/custom_edittext"
+     android:layout_marginTop="40dp"
+     android:inputType="textEmailAddress"
+     android:padding="8dp"
+     android:hint="Email"
+     android:drawableLeft="@drawable/ic_baseline_person_24"
+     android:drawablePadding="8dp"
+     android:textColor="@color/black"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/detalleNombreMueble"
+            android:layout_marginTop="14dp"
+            android:text="Nombre"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:padding="8dp"
+            android:background="@drawable/custom_edittext"
+            android:drawablePadding="8dp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginBottom="12dp"
+        />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/detallePrecioMueble"
+            android:layout_marginTop="14dp"
+            android:text="23$"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginBottom="12dp"
+        />
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/detalleMedidasMueble"
+            android:layout_marginTop="14dp"
+            android:text="120cmx120cm"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginBottom="12dp"
+            android:layout_margin="15dp"
+            android:justificationMode="inter_word"/>
+
+        <ImageView
+            android:id="@+id/detalleImagenMueble"
+            android:src="@mipmap/ic_launcher"
+            android:layout_width="400dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:padding="8dp"
+            android:scaleType="fitCenter"/>
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/detalleDescripcionMueble"
+            android:layout_marginTop="14dp"
+            android:text="Nombrfsdfsdfdsfdsfdsfdsfdsfdsfsdffdgfdgfdgfdggdfgdfgfddddddddddddddddgdffffe"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginBottom="12dp"
+            android:layout_margin="15dp"
+            android:justificationMode="inter_word"/>
+
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/detalleZonaMueble"
+            android:layout_marginTop="14dp"
+            android:text="Zona de exposición (piso + categoria):"
+            android:textStyle="bold"
+            android:textSize="24sp"
+            android:layout_gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginBottom="12dp"
+            android:layout_margin="15dp"
+            android:justificationMode="inter_word"/>
+
+        <ImageView
+            android:id="@+id/detalleImagenZona"
+            android:src="@mipmap/ic_launcher"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:layout_width="140dp"
+            android:layout_height="140dp"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center">
+           <com.google.android.material.floatingactionbutton.FloatingActionButton
+               android:id="@+id/modificarMueble"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_gravity="end|bottom"
+               android:src="@drawable/ic_baseline_update_24"
+               android:contentDescription="Eliminar"
+               android:layout_margin="16dp" />
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/eliminarMueble"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:src="@drawable/ic_baseline_delete_24"
+                android:contentDescription="Eliminar"
+                android:layout_margin="16dp" />
+    </LinearLayout>
+</LinearLayout>
+</ScrollView>

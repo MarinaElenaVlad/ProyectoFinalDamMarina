@@ -1,5 +1,6 @@
 package com.example.proyectofinaldammarina;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -12,6 +13,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
@@ -29,6 +32,11 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.Vista>{
         this.context = context;
     }
 
+    public void setSearchView(List<Mueble> listaFiltrada){
+        this.muebleList = listaFiltrada;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public Vista onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -41,18 +49,33 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.Vista>{
     }
 
     @Override
-    public void onBindViewHolder(@NonNull Vista holder, int position) {
+    public void onBindViewHolder(@NonNull Vista holder, @SuppressLint("RecyclerView") int position) {
         /**
          * LA IMAGEN!! + controlar si se pulsa ese item
          */
         holder.nombreMueble.setText(muebleList.get(position).getNombre());
-        holder.precioMueble.setText(muebleList.get(position).getPrecio() + "€");
+//        holder.precioMueble.setText(muebleList.get(position).getPrecio() + "€");
+        holder.precioMueble.setText(muebleList.get(position).getPrecio() + "");
+        /**
+         * poner signo euro en la pantalla, no en la variable!
+         */
 
 
         filaMueble.setOnClickListener(new View.OnClickListener() { //NUEVO
             @Override
             public void onClick(View v) {
-                context.startActivity(new Intent(context, MenuActivity.class));
+                /**
+                 * Pruebas, dio una vez error al buscar y dar click, pero luego no!
+                 */
+                Intent intent = new Intent(context, DetalleMuebleActivity.class);
+                intent.putExtra("codigo", muebleList.get(position).getCodigoQr());
+                intent.putExtra("nombre", muebleList.get(position).getNombre());
+                intent.putExtra("precio", muebleList.get(position).getPrecio());
+                intent.putExtra("medidas", muebleList.get(position).getMedidas());
+                intent.putExtra("imagen", muebleList.get(position).getImagen());
+                intent.putExtra("descripcion", muebleList.get(position).getDescripcion());
+
+                context.startActivity(intent);
             }
         });
     }

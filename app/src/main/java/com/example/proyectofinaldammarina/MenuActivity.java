@@ -59,7 +59,7 @@ public class MenuActivity extends AppCompatActivity {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Toast.makeText(MenuActivity.this, firebaseAuth.getUid(), Toast.LENGTH_LONG).show();
+        //Toast.makeText(MenuActivity.this, firebaseAuth.getUid(), Toast.LENGTH_LONG).show();
 
         // Cuando se carga el menú la opción "Inicio" está marcada por defecto
         reemplazarFragment(new InicioFragment());

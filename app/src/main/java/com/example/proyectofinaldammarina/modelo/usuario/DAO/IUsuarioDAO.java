@@ -12,6 +12,8 @@ public interface IUsuarioDAO {
    //Actualizar contraseña
 //   public void actualizarPassword(String idUsuario, String nuevaPassword);
 
+//   public String devolverRolUsuario(String key);
+
 
 
 }
