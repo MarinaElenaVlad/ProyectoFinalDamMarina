@@ -78,6 +78,7 @@ public class DetalleMuebleActivity extends AppCompatActivity {
         precioMueble.setText(bundle.getDouble("precio") + "€");
         medidasMueble.setText(bundle.getString("medidas"));
         descripcionMueble.setText(bundle.getString("descripcion"));
+        String zonaId = bundle.getString("zonaId");
         /**
          * zona + imagenes!!
          */

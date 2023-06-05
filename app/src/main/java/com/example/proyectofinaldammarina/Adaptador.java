@@ -74,6 +74,7 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.Vista>{
                 intent.putExtra("medidas", muebleList.get(position).getMedidas());
                 intent.putExtra("imagen", muebleList.get(position).getImagen());
                 intent.putExtra("descripcion", muebleList.get(position).getDescripcion());
+                intent.putExtra("zonaId", muebleList.get(position).getZonaId());
 
                 context.startActivity(intent);
             }

@@ -26,6 +26,8 @@ public class PerfilFragment extends Fragment {
 
     private FirebaseFirestore db;
 
+    public PerfilFragment() {
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -11,6 +11,9 @@ import android.view.ViewGroup;
 public class InicioFragment extends Fragment {
 
 
+    public InicioFragment() {
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
