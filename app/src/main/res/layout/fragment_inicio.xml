@@ -3,16 +3,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/brown"
+    android:background="@drawable/inicio"
     tools:context=".InicioFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+<!--    https://youtu.be/KwpuAhYrIpU-->
     <TextView
+        android:id="@+id/textView1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="Inicio"
-        android:textSize="30sp"
-        android:gravity="center"
-        android:textColor="@color/white"/>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:layout_marginBottom="30dp"
+        android:gravity="center_horizontal"
+        android:text="Bienvenido/a a IkeaMace"
+        android:textColor="@color/black"
+        android:textSize="50sp"
+        android:fontFamily="sans-serif-light"
+        android:textStyle="italic|bold" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="330dp"
+        android:layout_marginBottom="30dp"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center_horizontal"
+        android:inputType="textMultiLine"
+        android:text="¡Ten una experiencia más cómoda en la tienda!"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        android:textStyle="bold" />
+
 
 </FrameLayout>
