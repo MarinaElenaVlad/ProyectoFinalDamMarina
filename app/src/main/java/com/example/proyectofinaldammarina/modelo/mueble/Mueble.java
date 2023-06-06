@@ -1,8 +1,11 @@
 package com.example.proyectofinaldammarina.modelo.mueble;
+
+import java.io.Serializable;
+
 /**
  * Explicacion clase!!
  */
-public class Mueble {
+public class Mueble implements Serializable {
 
     private String codigoQr;
     private String imagen;

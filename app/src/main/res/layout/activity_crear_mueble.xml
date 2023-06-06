@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".DetalleMuebleActivity">
+<!--    probar a ver como se ve en otros moviles!! emuladores!-->
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/fondo"
+            tools:context=".CrearMuebleActivity">
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/toolbarDetalleMueble"
+                android:background="@color/blue"
+                app:logo="@drawable/ic_baseline_local_cafe_24"
+                app:title="Crear mueble"
+                app:titleMarginStart="30dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                app:popupTheme="@style/Theme.AppCompat.Light"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="80dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="20dp"
+                android:layout_marginBottom="20dp"
+                app:cardCornerRadius="30dp"
+                app:cardElevation="20dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_gravity="center_horizontal"
+                    android:padding="20dp"
+                    android:background="@drawable/custom_edittext">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Sube una imagen"
+                        android:textSize="30dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/black"/>
+
+                    <ImageView
+                        android:id="@+id/imagenSubir"
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:src="@drawable/subirimagen"
+                        android:layout_marginTop="20dp"
+                        android:scaleType="centerInside"/>
+
+                    <!--                    estanteria y zona-->
+                    <Spinner
+                        android:id="@+id/spinnerEstanteria"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="30dp"/>
+                    <Spinner
+                        android:id="@+id/spinnerZona"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"/>
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:id="@+id/nombreCrear"
+                        android:background="@drawable/custom_edittext"
+                        android:layout_marginTop="20dp"
+                        android:padding="16dp"
+                        android:hint="Nombre"
+                        android:inputType="text"
+                        android:gravity="start|center_vertical"
+                        android:textColor="@color/black"
+                        />
+
+<!--                    tipo de dato que puede introducir, probar!!-->
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:id="@+id/precioCrear"
+                        android:background="@drawable/custom_edittext"
+                        android:layout_marginTop="20dp"
+                        android:padding="16dp"
+                        android:hint="Precio"
+                        android:inputType="numberDecimal"
+                        android:gravity="start|center_vertical"
+                        android:textColor="@color/black"
+                    />
+
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:id="@+id/medidasCrear"
+                        android:background="@drawable/custom_edittext"
+                        android:layout_marginTop="20dp"
+                        android:padding="16dp"
+                        android:hint="Medidas"
+                        android:inputType="text"
+                        android:gravity="start|center_vertical"
+                        android:textColor="@color/black"
+                        />
+<!--                    descripcion, tener en cuenta hacer el input mas grande-->
+                    <EditText
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        android:id="@+id/descripcionCrear"
+                        android:background="@drawable/custom_edittext"
+                        android:layout_marginTop="20dp"
+                        android:padding="16dp"
+                        android:hint="Descripcion"
+                        android:inputType="text"
+                        android:gravity="start|center_vertical"
+                        android:textColor="@color/black"
+                        />
+
+                </LinearLayout>
+
+
+            </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
+</ScrollView>

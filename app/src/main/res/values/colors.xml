@@ -11,5 +11,7 @@
     <color name="grey">#A9A9A9</color>
     <color name="brown">#BCAAA4</color>
     <color name="blueMarino">#1D375E</color>
+    <color name="red">#FF6663</color>
+    <color name="yellow">#F9DB22</color>
 
 </resources>

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ComparacionMuebleActivity">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        tools:context=".ComparacionMuebleActivity">
+
+<!--        poner el nombre del mueble en la toolbar-->
+        <androidx.appcompat.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbarComparacionMueble"
+            android:background="@color/blue"
+            app:logo="@drawable/ic_baseline_local_cafe_24"
+            app:title="Comparación mueble"
+            app:titleMarginStart="30dp"
+            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+            app:popupTheme="@style/Theme.AppCompat.Light"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/editNombre"
+            android:background="@drawable/custom_edittext"
+            android:layout_marginTop="40dp"
+            android:inputType="text"
+            android:padding="8dp"
+            android:hint="Nombre"
+            android:drawableLeft="@drawable/ic_baseline_person_24"
+            android:drawablePadding="8dp"
+            android:textColor="@color/black"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:id="@+id/editPrecio"
+            android:background="@drawable/custom_edittext"
+            android:layout_marginTop="40dp"
+            android:inputType="numberDecimal"
+            android:padding="8dp"
+            android:hint="Precio"
+            android:drawableLeft="@drawable/ic_baseline_person_24"
+            android:drawablePadding="8dp"
+            android:textColor="@color/black"/>
+
+        <ImageView
+            android:id="@+id/comparacionImagenEstanteria"
+            android:src="@mipmap/ic_launcher"
+            android:layout_gravity="center"
+            android:scaleType="fitXY"
+            android:layout_width="140dp"
+            android:layout_height="140dp"/>
+
+
+    </LinearLayout>
+</ScrollView>

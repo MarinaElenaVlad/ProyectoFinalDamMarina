@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.CAMERA" />
+<!--    <uses-permission android:name="android.permission.CAMERA" />-->
 
     <application
         android:allowBackup="true"
@@ -15,11 +15,13 @@
         android:theme="@style/Theme.ProyectoFinalDamMarina"
         tools:targetApi="31">
         <activity
-            android:name=".DetalleMuebleActivity"
-            android:exported="false">
-            <meta-data
-                android:name="android.app.lib_name"
-                android:value="" />
+            android:name=".CrearMuebleActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ComparacionMuebleActivity"
+            android:exported="false"
+            android:label="@string/title_activity_comparacion_mueble"
+            android:theme="@style/Theme.ProyectoFinalDamMarina">
         </activity>
         <activity
             android:name=".MenuActivity"
@@ -48,6 +50,11 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+        <activity
+            android:name=".CaptureActivityPortraint"
+            android:screenOrientation="fullSensor"
+            android:theme="@style/zxing_CaptureTheme"
+            android:windowSoftInputMode="stateAlwaysHidden" />
     </application>
 
 </manifest>

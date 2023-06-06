@@ -56,11 +56,13 @@
             android:textColor="@color/black"
             android:layout_marginBottom="12dp"
         />
+<!--    MIRAR LO DE TIPO INPUT, PUEDE QUE FALLE POR EL $-->
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/detallePrecioMueble"
             android:layout_marginTop="14dp"
+            android:inputType="numberDecimal"
             android:text="23$"
             android:textStyle="bold"
             android:textSize="24sp"
