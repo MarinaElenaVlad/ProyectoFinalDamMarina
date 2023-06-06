@@ -38,6 +38,8 @@ public class Mueble implements Serializable {
         this.descripcion = descripcion;
     }
 
+
+
     /**
      * Métodos get y set de cada atributo
      */

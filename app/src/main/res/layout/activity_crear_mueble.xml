@@ -57,7 +57,7 @@
                     <ImageView
                         android:id="@+id/imagenSubir"
                         android:layout_width="match_parent"
-                        android:layout_height="100dp"
+                        android:layout_height="200dp"
                         android:src="@drawable/subirimagen"
                         android:layout_marginTop="20dp"
                         android:scaleType="centerInside"/>
@@ -121,10 +121,20 @@
                         android:background="@drawable/custom_edittext"
                         android:layout_marginTop="20dp"
                         android:padding="16dp"
-                        android:hint="Descripcion"
+                        android:hint="Descripción"
                         android:inputType="text"
                         android:gravity="start|center_vertical"
                         android:textColor="@color/black"
+                        />
+                    <Button
+                        android:layout_width="match_parent"
+                        android:layout_height="60dp"
+                        android:text="Guardar"
+                        android:backgroundTint="@color/black"
+                        android:id="@+id/botonGuardarMueble"
+                        android:textSize="18sp"
+                        android:layout_marginTop="20dp"
+                        app:cornerRadius="20dp"
                         />
 
                 </LinearLayout>

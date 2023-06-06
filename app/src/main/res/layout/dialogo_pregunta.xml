@@ -34,7 +34,7 @@
             android:id="@+id/mensajeDuda"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="No hay ningún mueble asociado a ese código, ¿Desea asociar un nuevo mueble a este código?"
+            android:text="No hay ningún mueble asociado a este código, ¿Desea asociarlo a un nuevo mueble?"
             android:layout_marginTop="20dp"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"

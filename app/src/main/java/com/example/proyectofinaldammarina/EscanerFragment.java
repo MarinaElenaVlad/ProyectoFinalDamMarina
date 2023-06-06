@@ -165,7 +165,9 @@ public class EscanerFragment extends Fragment {
                                             /**
                                              * No puedes añadir "" como id, numeros -1? aunque sea string?
                                              */
-                                            startActivity(new Intent(getActivity(), CrearMuebleActivity.class));
+                                            Intent intent = new Intent(getActivity(), CrearMuebleActivity.class);
+                                            intent.putExtra("id", valorEscaneo);
+                                            startActivity(intent);
                                             alerta.dismiss();//se quita el dialogo si decide volver atras
                                         }
                                     });

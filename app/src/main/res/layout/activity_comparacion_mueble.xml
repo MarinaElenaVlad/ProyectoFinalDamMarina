@@ -61,6 +61,9 @@
             android:layout_width="140dp"
             android:layout_height="140dp"/>
 
+<!--    SE MUESTRA SOLO LA ESTANTERIA DEL MUEBLE -> IMAGEN SI EL STOCK = X CANTIDAD
+ TAMBIEN SE PODRA EDITAR SEGUN ROL!-->
+
 
     </LinearLayout>
 </ScrollView>

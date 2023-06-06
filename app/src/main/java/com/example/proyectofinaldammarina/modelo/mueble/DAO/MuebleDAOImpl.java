@@ -1,15 +1,19 @@
 package com.example.proyectofinaldammarina.modelo.mueble.DAO;
 
 import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
 import com.example.proyectofinaldammarina.Adaptador;
+import com.example.proyectofinaldammarina.CrearMuebleActivity;
 import com.example.proyectofinaldammarina.DetalleMuebleActivity;
+import com.example.proyectofinaldammarina.MenuActivity;
 import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -47,6 +51,27 @@ public class MuebleDAOImpl implements IMuebleDAO {
                 }
             }
         });
+    }
+
+    @Override
+    public void insertarMueble(Mueble mueble, Context context) {
+        DocumentReference docRef = database.collection(nombreColeccion).document(mueble.getCodigoQr());
+        docRef.set(mueble)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+
+                        Toast.makeText(context, "DocumentSnapshot successfully written!", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(context, MenuActivity.class);
+                        context.startActivity(intent);
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(context, "Error writing document!", Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
 //    @Override
