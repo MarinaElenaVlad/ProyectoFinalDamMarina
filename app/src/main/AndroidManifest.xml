@@ -61,6 +61,10 @@
             android:screenOrientation="fullSensor"
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
+        <activity android:name=".Adaptador"
+            android:exported="false"/>
+        <activity android:name=".DetalleMuebleActivity"
+            android:exported="false"/>
     </application>
 
 </manifest>

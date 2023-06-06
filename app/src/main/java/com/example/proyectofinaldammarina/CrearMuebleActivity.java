@@ -54,6 +54,8 @@ public class CrearMuebleActivity extends AppCompatActivity {
 
         storage = FirebaseStorage.getInstance();
 
+        db = FirebaseFirestore.getInstance();
+
         Bundle bundle = getIntent().getExtras();
 
         idMueble = bundle.getString("id");

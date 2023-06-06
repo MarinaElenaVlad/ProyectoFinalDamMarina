@@ -122,7 +122,7 @@
                         android:layout_marginTop="20dp"
                         android:padding="16dp"
                         android:hint="Descripción"
-                        android:inputType="text"
+                        android:inputType="textMultiLine"
                         android:gravity="start|center_vertical"
                         android:textColor="@color/black"
                         />

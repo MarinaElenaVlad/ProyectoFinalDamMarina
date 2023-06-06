@@ -1,5 +1,8 @@
 package com.example.proyectofinaldammarina.modelo.usuario;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Explicacion clase!!
  */
@@ -8,8 +11,8 @@ public class Usuario {
     // Se declaran los atributos
     private String nombre;
     private String email;
-    private String password;
     private String idRol;
+    private List<String> muebles = new ArrayList<>();
     /**
      * HISTORIAL!!!!!
      */
@@ -49,13 +52,6 @@ public class Usuario {
         this.email = email;
     }
 
-//    public String getPassword() {
-//        return password;
-//    }
-//
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
 
     public String getIdRol() {
         return idRol;
@@ -65,12 +61,20 @@ public class Usuario {
         this.idRol = idRol;
     }
 
+
+    public List<String> getMuebles() {
+        return muebles;
+    }
+
+    public void setMuebles(List<String> muebles) {
+        this.muebles = muebles;
+    }
+
     @Override
     public String toString() {
         return "Usuario{" +
                 "nombre='" + nombre + '\'' +
                 ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
                 ", idRol='" + idRol + '\'' +
                 '}';
     }

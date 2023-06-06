@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -50,9 +52,8 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.Vista>{
 
     @Override
     public void onBindViewHolder(@NonNull Vista holder, @SuppressLint("RecyclerView") int position) {
-        /**
-         * LA IMAGEN!! + controlar si se pulsa ese item
-         */
+
+        Picasso.get().load(muebleList.get(position).getImagen()).into(holder.imagenMueble);
         holder.nombreMueble.setText(muebleList.get(position).getNombre());
 //        holder.precioMueble.setText(muebleList.get(position).getPrecio() + "€");
         holder.precioMueble.setText(muebleList.get(position).getPrecio() + "");
@@ -89,10 +90,14 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.Vista>{
     public class Vista extends RecyclerView.ViewHolder {
         TextView nombreMueble, precioMueble;
 
+        ImageView imagenMueble;
+
         public Vista(@NonNull View itemView) {
             super(itemView);
             nombreMueble = itemView.findViewById(R.id.muebleNombreItem);
             precioMueble = itemView.findViewById(R.id.mueblePrecioItem);
+            imagenMueble = itemView.findViewById(R.id.imagenMuebleItem);
+
 
             filaMueble = itemView.findViewById(R.id.filaMueble);
 

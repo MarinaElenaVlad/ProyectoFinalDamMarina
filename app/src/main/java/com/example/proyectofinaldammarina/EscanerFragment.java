@@ -3,32 +3,28 @@ package com.example.proyectofinaldammarina;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.cardview.widget.CardView;
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
 import com.example.proyectofinaldammarina.modelo.usuario.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.zxing.integration.android.IntentIntegrator;
-import com.google.zxing.integration.android.IntentResult;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 
@@ -66,6 +62,30 @@ public class EscanerFragment extends Fragment {
             }
         });
 
+        cardViewHistorial = root.findViewById(R.id.cardHistorial);
+
+        cardViewHistorial.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                db.collection("usuarios").document(firebaseAuth.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        Usuario usuario = documentSnapshot.toObject(Usuario.class);
+
+                        /**
+                         * borrar referencia anterior y sustituir por la nueva? hacer esta comprobacion?
+                         */
+                        //cargar datos
+                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        fragmentTransaction.replace(R.id.frame_layout, new HistorialFragment());
+                        fragmentTransaction.commit();
+                    }
+                });
+            }
+        });
+
+
         return root;
     }
 
@@ -101,12 +121,24 @@ public class EscanerFragment extends Fragment {
                             /**
                              * AÑADIR AL HISTORIAL!!
                              */
+                            db.collection("usuarios").document(firebaseAuth.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                @Override
+                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                    Usuario usuario = documentSnapshot.toObject(Usuario.class);
 
-                            Mueble mueble = document.toObject(Mueble.class);
-                            Intent intent = new Intent(getActivity(), ComparacionMuebleActivity.class);
-                            //intent.putExtra("id", valorEscaneo);
-                            intent.putExtra("mueble", mueble);
-                            startActivity(intent);
+                                    /***
+                                     * que lo datos se guarden en la bd!!
+                                     */
+                                    // Se añade el id del mueble buscado a la lista
+                                    usuario.getMuebles().add(valorEscaneo);
+                                    System.out.println("TAMAÑO ARRAY" + usuario.getMuebles().size());
+
+                                    Mueble mueble = document.toObject(Mueble.class);
+                                    Intent intent = new Intent(getActivity(), ComparacionMuebleActivity.class);
+                                    intent.putExtra("mueble", mueble);
+                                    startActivity(intent);
+                                }
+                            });
 
                         } else {//El documento no existe!
                             //si el usuario es un cliente se le muestra un mensaje de error
@@ -135,15 +167,13 @@ public class EscanerFragment extends Fragment {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 Usuario usuario = document.toObject(Usuario.class);
-                                System.out.println(usuario.toString());
-                                System.out.println("ACTIVITY" + usuario.getIdRol());
                                 if (usuario.getIdRol().equals("empleado")) {
                                     AlertDialog.Builder builder;
                                     AlertDialog alerta;
 
                                     View layoutView = getLayoutInflater().inflate(R.layout.dialogo_pregunta, null);
-                                    AppCompatButton botonOkDialogo = layoutView.findViewById(R.id.botonOkDuda);
-                                    AppCompatButton botonCancelarDialogo = layoutView.findViewById(R.id.botonCancelarDuda);
+                                    AppCompatButton botonOkDialogo = layoutView.findViewById(R.id.botonSiDuda);
+                                    AppCompatButton botonCancelarDialogo = layoutView.findViewById(R.id.botonNoDuda);
 
                                     builder = new AlertDialog.Builder(getActivity());
                                     builder.setView(layoutView);

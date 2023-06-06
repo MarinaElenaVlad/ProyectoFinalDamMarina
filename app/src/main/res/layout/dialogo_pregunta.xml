@@ -51,21 +51,21 @@
             android:gravity="center_horizontal">
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/botonCancelarDuda"
+                android:id="@+id/botonNoDuda"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
                 android:background="@drawable/custom_edittext"
-                android:text="Cancelar"
+                android:text="No"
                 android:textColor="@color/black" />
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/botonOkDuda"
+                android:id="@+id/botonSiDuda"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginLeft="30dp"
                 android:background="@drawable/custom_edittext"
-                android:text="Ok"
+                android:text="Si"
                 android:textColor="@color/black" />
         </LinearLayout>
 
