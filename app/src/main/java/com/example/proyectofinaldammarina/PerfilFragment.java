@@ -36,7 +36,7 @@ public class PerfilFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_perfil, container, false);
 
 /**
- * PUEDO PONER ROL TAMBIEN + FOTO RELACIONADA, CORREO , NOMBRE, FOTO PERFIL
+ * PUEDO PONER ROL TAMBIEN + FOTO RELACIONADA, CORREO , NOMBRE, FOTO PERFIL + hola empleado/cliente (bienvenido a tienda/ trabajo/ informar funciones q tiene)
  */
         db = FirebaseFirestore.getInstance();
 
