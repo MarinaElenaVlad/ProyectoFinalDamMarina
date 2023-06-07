@@ -9,9 +9,13 @@ import java.util.List;
 public class Usuario {
 
     // Se declaran los atributos
+    /**
+     * poner id??
+     */
     private String nombre;
     private String email;
     private String idRol;
+    private String imagenUsuario;
     /**
      * HISTORIAL!!!!!
      */
@@ -25,11 +29,12 @@ public class Usuario {
     /**
      * Constructor con parámetros
      */
-    public Usuario(String nombre, String email, String idRol) {
+    public Usuario(String nombre, String email, String idRol, String imagenUsuario) {
         this.nombre = nombre;
         this.email = email;
 //        this.password = password;
         this.idRol = idRol;
+        this.imagenUsuario = imagenUsuario;
     }
 
     /**
@@ -60,7 +65,13 @@ public class Usuario {
         this.idRol = idRol;
     }
 
+    public String getImagenUsuario() {
+        return imagenUsuario;
+    }
 
+    public void setImagenUsuario(String imagenUsuario) {
+        this.imagenUsuario = imagenUsuario;
+    }
 
     @Override
     public String toString() {

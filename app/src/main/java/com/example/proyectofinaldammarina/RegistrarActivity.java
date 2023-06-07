@@ -67,7 +67,7 @@ public class RegistrarActivity extends AppCompatActivity {
                             //uid usuario
                             try {
                                 UsuarioDAOImpl usuarioDAO = new UsuarioDAOImpl(firebaseFirestore, "usuarios");
-                                usuarioDAO.insertarUsuario(new Usuario(nombre, email,"cliente"), FirebaseAuth.getInstance().getUid());
+                                usuarioDAO.insertarUsuario(new Usuario(nombre, email,"cliente", ""), FirebaseAuth.getInstance().getUid());
                                 Toast.makeText(RegistrarActivity.this, "¡Cuenta creada con éxito!", Toast.LENGTH_LONG).show();
                                 startActivity(new Intent(RegistrarActivity.this, LoginActivity.class));
 

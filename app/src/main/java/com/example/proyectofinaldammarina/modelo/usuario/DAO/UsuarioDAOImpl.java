@@ -1,9 +1,12 @@
 package com.example.proyectofinaldammarina.modelo.usuario.DAO;
 
+import android.content.Context;
+import android.content.Intent;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
+import com.example.proyectofinaldammarina.MenuActivity;
 import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
 import com.example.proyectofinaldammarina.modelo.usuario.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,9 +40,29 @@ public class UsuarioDAOImpl implements IUsuarioDAO {
     @Override
     public Usuario insertarUsuario(Usuario usuario, String idNuevoUsuario) {
         database.collection(nombreColeccion).document(idNuevoUsuario)
-                .set(new Usuario(usuario.getNombre(),usuario.getEmail(), "cliente"));
+                .set(new Usuario(usuario.getNombre(),usuario.getEmail(), "cliente", ""));
 
         return null;
+    }
+
+    @Override
+    public void actualizarFotoPerfil(String id, String imagenUri, Context context) {
+        DocumentReference usuarioReferencia = database.collection(nombreColeccion).document(id);
+
+        /**
+         * campo mismo nombre que el de la bd, sino te crea uno nuevo!
+         */
+        usuarioReferencia.update("imagenUsuario", imagenUri).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    Toast.makeText(context, "Campo/s actualizados.", Toast.LENGTH_SHORT).show();
+                    context.startActivity(new Intent(context, MenuActivity.class));
+                }else{
+                    Toast.makeText(context, "Error al actualizar", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
 //    @Override

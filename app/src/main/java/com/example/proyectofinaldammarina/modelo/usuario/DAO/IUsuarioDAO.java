@@ -1,5 +1,7 @@
 package com.example.proyectofinaldammarina.modelo.usuario.DAO;
 
+import android.content.Context;
+
 import com.example.proyectofinaldammarina.modelo.usuario.Usuario;
 
 /**
@@ -13,6 +15,8 @@ public interface IUsuarioDAO {
 //   public void actualizarPassword(String idUsuario, String nuevaPassword);
 
 //   public String devolverRolUsuario(String key);
+
+   public void actualizarFotoPerfil(String id, String imagenUri, Context context);
 
 
 

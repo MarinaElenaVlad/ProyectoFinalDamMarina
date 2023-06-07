@@ -12,6 +12,9 @@ import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
  */
 public class ComparacionMuebleActivity extends AppCompatActivity {
 
+    /**
+     * se llama a esta clase desde dos partes, CUIDADO BUNDLE!!
+     */
     private Mueble mueble;
 
     @Override
