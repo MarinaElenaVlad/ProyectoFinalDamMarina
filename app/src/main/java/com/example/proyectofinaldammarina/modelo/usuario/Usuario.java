@@ -12,7 +12,6 @@ public class Usuario {
     private String nombre;
     private String email;
     private String idRol;
-    private List<String> muebles = new ArrayList<>();
     /**
      * HISTORIAL!!!!!
      */
@@ -62,13 +61,6 @@ public class Usuario {
     }
 
 
-    public List<String> getMuebles() {
-        return muebles;
-    }
-
-    public void setMuebles(List<String> muebles) {
-        this.muebles = muebles;
-    }
 
     @Override
     public String toString() {

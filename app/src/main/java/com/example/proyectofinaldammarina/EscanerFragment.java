@@ -16,17 +16,25 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.example.proyectofinaldammarina.modelo.historial.Historial;
 import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
 import com.example.proyectofinaldammarina.modelo.usuario.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 public class EscanerFragment extends Fragment {
 
@@ -37,6 +45,8 @@ public class EscanerFragment extends Fragment {
     private FirebaseFirestore db;
 
     private FirebaseAuth firebaseAuth;
+
+    private Historial historial;
 
 
     public EscanerFragment() {
@@ -52,7 +62,6 @@ public class EscanerFragment extends Fragment {
 
         firebaseAuth = FirebaseAuth.getInstance();
 
-
         cardViewEscanear = root.findViewById(R.id.cardEscaner);
 
         cardViewEscanear.setOnClickListener(new View.OnClickListener() {
@@ -67,21 +76,16 @@ public class EscanerFragment extends Fragment {
         cardViewHistorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                db.collection("usuarios").document(firebaseAuth.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        Usuario usuario = documentSnapshot.toObject(Usuario.class);
 
-                        /**
-                         * borrar referencia anterior y sustituir por la nueva? hacer esta comprobacion?
-                         */
-                        //cargar datos
-                        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                        fragmentTransaction.replace(R.id.frame_layout, new HistorialFragment());
-                        fragmentTransaction.commit();
-                    }
-                });
+                /**
+                 * borrar referencia anterior y sustituir por la nueva? hacer esta comprobacion?
+                 */
+                //cargar datos
+//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+//                fragmentTransaction.replace(R.id.frame_layout, new HistorialFragment());
+//                fragmentTransaction.commit();
+                startActivity(new Intent(getActivity(), HistorialActivity.class));
             }
         });
 
@@ -121,24 +125,62 @@ public class EscanerFragment extends Fragment {
                             /**
                              * AÑADIR AL HISTORIAL!!
                              */
-                            db.collection("usuarios").document(firebaseAuth.getUid()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+                            db.collection("historial").whereEqualTo("usuario", firebaseAuth.getUid()).get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
-                                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                    Usuario usuario = documentSnapshot.toObject(Usuario.class);
-
-                                    /***
-                                     * que lo datos se guarden en la bd!!
-                                     */
-                                    // Se añade el id del mueble buscado a la lista
-                                    usuario.getMuebles().add(valorEscaneo);
-                                    System.out.println("TAMAÑO ARRAY" + usuario.getMuebles().size());
-
-                                    Mueble mueble = document.toObject(Mueble.class);
-                                    Intent intent = new Intent(getActivity(), ComparacionMuebleActivity.class);
-                                    intent.putExtra("mueble", mueble);
-                                    startActivity(intent);
+                                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                    if (task.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : task.getResult()) {
+                                            historial = document.toObject(Historial.class);
+                                            historial.setIdentificador(document.getId());
+                                        }
+                                        actualizarHistorial(historial, valorEscaneo);
+//                                        if(historial == null) { //no se ha encontrado el documento
+//                                            historial = new Historial(Arrays.asList(), firebaseAuth.getUid());
+//                                            //no existe en la base de datos
+//                                            //https://stackoverflow.com/questions/47474522/firestore-difference-between-set-and-add
+//                                            db.collection("historial")
+//                                                .add(historial)
+//                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+//                                                    @Override
+//                                                    public void onSuccess(DocumentReference documentReference) {
+//                                                        //se obtiene el id automatico
+//                                                        historial.setIdentificador(documentReference.getId());
+//                                                    }
+//                                                });
+//                                            //Se llama al metodo que actualiza el historial
+//                                            actualizarHistorial(historial, valorEscaneo);
+//                                        }
+                                    }else{
+                                        Toast.makeText(getActivity(), "Error getting documents:", Toast.LENGTH_LONG).show();
+                                    }
                                 }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        historial = new Historial(Arrays.asList(), firebaseAuth.getUid());
+                                        //no existe en la base de datos
+                                        //https://stackoverflow.com/questions/47474522/firestore-difference-between-set-and-add
+                                        db.collection("historial")
+                                                .add(historial)
+                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                    @Override
+                                                    public void onSuccess(DocumentReference documentReference) {
+                                                        //se obtiene el id automatico
+                                                        historial.setIdentificador(documentReference.getId());
+                                                    }
+                                                });
+                                        //Se llama al metodo que actualiza el historial
+                                        actualizarHistorial(historial, valorEscaneo);
+                                    }
                             });
+
+                            Mueble mueble = document.toObject(Mueble.class);
+                            Intent intent = new Intent(getActivity(), ComparacionMuebleActivity.class);
+                            intent.putExtra("mueble", mueble);
+                            startActivity(intent);
+
 
                         } else {//El documento no existe!
                             //si el usuario es un cliente se le muestra un mensaje de error
@@ -230,6 +272,24 @@ public class EscanerFragment extends Fragment {
                                 }
                             }
                         }
+                    }
+                });
+    }
+
+    private void actualizarHistorial(Historial his, String muebleConsultado){
+        // Se añade el id del mueble buscado a la lista
+        his.getMuebleList().add(muebleConsultado);
+        db.collection("historial").document(his.getIdentificador())
+                .update("muebleList", his.getMuebleList()).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(getActivity(), "DocumentSnapshot successfully updated!!", Toast.LENGTH_LONG).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(getActivity(), "Error updating document!!", Toast.LENGTH_LONG).show();
                     }
                 });
     }

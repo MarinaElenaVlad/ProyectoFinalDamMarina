@@ -21,14 +21,16 @@
         android:theme="@style/Theme.ProyectoFinalDamMarina"
         tools:targetApi="31">
         <activity
+            android:name=".HistorialActivity"
+            android:exported="false" />
+        <activity
             android:name=".CrearMuebleActivity"
             android:exported="false" />
         <activity
             android:name=".ComparacionMuebleActivity"
             android:exported="false"
             android:label="@string/title_activity_comparacion_mueble"
-            android:theme="@style/Theme.ProyectoFinalDamMarina">
-        </activity>
+            android:theme="@style/Theme.ProyectoFinalDamMarina"></activity>
         <activity
             android:name=".MenuActivity"
             android:exported="false">
@@ -61,10 +63,12 @@
             android:screenOrientation="fullSensor"
             android:theme="@style/zxing_CaptureTheme"
             android:windowSoftInputMode="stateAlwaysHidden" />
-        <activity android:name=".Adaptador"
-            android:exported="false"/>
-        <activity android:name=".DetalleMuebleActivity"
-            android:exported="false"/>
+        <activity
+            android:name=".Adaptador"
+            android:exported="false" />
+        <activity
+            android:name=".DetalleMuebleActivity"
+            android:exported="false" />
     </application>
 
 </manifest>
