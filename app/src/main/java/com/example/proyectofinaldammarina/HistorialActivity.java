@@ -12,9 +12,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.proyectofinaldammarina.modelo.historial.Historial;
+import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -77,8 +79,21 @@ public class HistorialActivity extends AppCompatActivity implements AdapterView.
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         String idMueble = listaMuebles.get(position);
-        Intent intent = new Intent(HistorialActivity.this, ComparacionMuebleActivity.class);
-        intent.putExtra("id", idMueble);
-        startActivity(intent);
+
+        db.collection("muebles").document(idMueble).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot document = task.getResult();
+                if (document.exists()) {
+                    Mueble mueble = document.toObject(Mueble.class);
+                    Intent intent = new Intent(HistorialActivity.this, ComparacionMuebleActivity.class);
+                    intent.putExtra("mueble", mueble);
+                    startActivity(intent);
+                }
+            }
+        });
+
+
+
     }
 }

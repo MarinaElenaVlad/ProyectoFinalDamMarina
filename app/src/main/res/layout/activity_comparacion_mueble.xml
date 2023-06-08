@@ -1,69 +1,214 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ComparacionMuebleActivity">
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:background="@color/blue"
+        app:logo="@drawable/ic_baseline_local_cafe_24"
+        app:title="Nombre aplicación"
+        app:titleMarginStart="30dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/Theme.AppCompat.Light"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        tools:context=".ComparacionMuebleActivity">
+        android:layout_marginTop="65dp">
 
-<!--        poner el nombre del mueble en la toolbar-->
-        <androidx.appcompat.widget.Toolbar
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/toolbarComparacionMueble"
-            android:background="@color/blue"
-            app:logo="@drawable/ic_baseline_local_cafe_24"
-            app:title="Comparación mueble"
-            app:titleMarginStart="30dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
-            app:popupTheme="@style/Theme.AppCompat.Light"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:padding="20dp">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/editNombre"
-            android:background="@drawable/custom_edittext"
-            android:layout_marginTop="40dp"
-            android:inputType="text"
-            android:padding="8dp"
-            android:hint="Nombre"
-            android:drawableLeft="@drawable/ic_baseline_person_24"
-            android:drawablePadding="8dp"
-            android:textColor="@color/black"/>
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="280dp">
 
-        <EditText
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:id="@+id/editPrecio"
-            android:background="@drawable/custom_edittext"
-            android:layout_marginTop="40dp"
-            android:inputType="numberDecimal"
-            android:padding="8dp"
-            android:hint="Precio"
-            android:drawableLeft="@drawable/ic_baseline_person_24"
-            android:drawablePadding="8dp"
-            android:textColor="@color/black"/>
+                <ImageView
+                    android:id="@+id/imageComparacionMueble"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/ic_launcher_background" />
 
-        <ImageView
-            android:id="@+id/comparacionImagenEstanteria"
-            android:src="@mipmap/ic_launcher"
-            android:layout_gravity="center"
-            android:scaleType="fitXY"
-            android:layout_width="140dp"
-            android:layout_height="140dp"/>
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="65dp"
+                    android:background="#70000000"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
 
-<!--    SE MUESTRA SOLO LA ESTANTERIA DEL MUEBLE -> IMAGEN SI EL STOCK = X CANTIDAD
- TAMBIEN SE PODRA EDITAR SEGUN ROL!-->
+                <EditText
+                    android:id="@+id/nombreComparacionMueble"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Texto de prueba"
+                    android:textColor="@color/white"
+                    android:textSize="21sp"
+                    android:textStyle="bold"
+                    android:inputType="text"
+                    android:background="@android:color/transparent"
+                    app:layout_constraintStart_toStartOf="@+id/imageMedidas"
+                    app:layout_constraintTop_toTopOf="@+id/view" />
 
+                <ImageView
+                    android:id="@+id/imageMedidas"
+                    android:layout_width="33dp"
+                    android:layout_height="33dp"
+                    android:layout_marginStart="10dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:srcCompat="@drawable/medida" />
 
-    </LinearLayout>
-</ScrollView>
+                <EditText
+                    android:id="@+id/medidasComparacionMueble"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:background="@android:color/transparent"
+                    android:text="Texto de prueba"
+                    android:textColor="@color/white"
+                    android:textSize="17sp"
+                    android:textStyle="normal"
+                    android:inputType="text"
+                    app:layout_constraintBottom_toBottomOf="@+id/imageMedidas"
+                    app:layout_constraintStart_toEndOf="@+id/imageMedidas"
+                    app:layout_constraintTop_toTopOf="@+id/imageMedidas" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <EditText
+                android:id="@+id/precioComparacionMueble"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="precio"
+                android:background="@android:color/transparent"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="32dp"
+                android:inputType="numberDecimal" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:background="@drawable/fondo_estanteria"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:elevation="3dp"
+                android:orientation="horizontal">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.6333"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/imageComparacionEstanteria"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/textViewEstanteria"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/estanteria" />
+
+                    <TextView
+                        android:id="@+id/textViewEstanteria"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginEnd="16dp"
+                        android:text="estantería"
+                        android:textSize="16sp"
+                        android:textColor="#575454"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <View
+                    android:id="@+id/view2"
+                    android:layout_width="1dp"
+                    android:layout_height="wrap_content"
+                    android:background="#C5BEBE"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"/>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3333"
+                    android:layout_height="match_parent">
+
+                    <TextView
+                        android:id="@+id/textViewEstanteria2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="1A"
+                        android:textColor="#575454"
+                        android:textSize="21sp"
+                        android:textStyle="bold"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Descripción"
+                android:background="@android:color/transparent"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:layout_marginTop="16dp"
+                android:layout_marginStart="32dp"/>
+
+            <EditText
+                android:id="@+id/descripcionComparacionMueble"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="hgfhgfhgfhgfgggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggggg"
+                android:background="@android:color/transparent"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"
+                android:layout_marginStart="32dp"
+                android:layout_marginEnd="32dp"
+                android:inputType="textMultiLine" />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/botonModificarComparacionMueble"
+                style="@android:style/Widget.Button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="32dp"
+                android:text="Guardar cambios"
+                android:textStyle="bold"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:background="@color/brown"
+                />
+        </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

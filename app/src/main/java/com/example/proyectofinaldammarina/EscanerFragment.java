@@ -76,7 +76,6 @@ public class EscanerFragment extends Fragment {
         cardViewHistorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 /**
                  * borrar referencia anterior y sustituir por la nueva? hacer esta comprobacion?
                  */
@@ -293,5 +292,6 @@ public class EscanerFragment extends Fragment {
                     }
                 });
     }
+
 
 }
