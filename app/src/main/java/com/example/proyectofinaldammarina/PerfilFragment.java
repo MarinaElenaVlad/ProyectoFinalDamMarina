@@ -40,6 +40,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * QUE PUEDAN CAMBIAR NOMBRE TAMBIEN!!
+ */
 public class PerfilFragment extends Fragment {
 
     private FirebaseFirestore db;

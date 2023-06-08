@@ -28,11 +28,14 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.squareup.picasso.Picasso;
 
 public class DetalleMuebleActivity extends AppCompatActivity {
 
     // Se declaran variables
-    private EditText nombreMueble, precioMueble, medidasMueble, descripcionMueble, zonaMueble;
+    private EditText nombreMueble, precioMueble, medidasMueble, descripcionMueble;
+
+    private TextView zonaMueble;
     private ImageView imagenMueble, imagenZona;
 
     private FirebaseAuth firebaseAuth;
@@ -78,6 +81,9 @@ public class DetalleMuebleActivity extends AppCompatActivity {
         precioMueble.setText(bundle.getDouble("precio") + "€");
         medidasMueble.setText(bundle.getString("medidas"));
         descripcionMueble.setText(bundle.getString("descripcion"));
+
+        Picasso.get().load(bundle.getString("imagen")).into(imagenMueble);
+
         String zonaId = bundle.getString("zonaId");
         /**
          * zona + imagenes!!

@@ -68,6 +68,10 @@ public class ComparacionMuebleActivity extends AppCompatActivity {
         comprobarPermisos();
 
         /**
+         * borrar del historial si no existe ese mueble (se ha borrado)
+         */
+
+        /**
          * no funcionaaaaaaaaaaaa POR EL SIMBOLO DEL EURO!!! CUIDADO, QUITAR SIMBOLO AL GUARDAR, PONER CONDICION DE NO BORRAR EL EURO??
          */
         botonActualizar.setOnClickListener(new View.OnClickListener() {
