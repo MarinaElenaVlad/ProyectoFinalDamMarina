@@ -12,12 +12,15 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.proyectofinaldammarina.modelo.estanteria.Estanteria;
 import com.example.proyectofinaldammarina.modelo.mueble.DAO.MuebleDAOImpl;
 import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
 import com.example.proyectofinaldammarina.modelo.usuario.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -35,7 +38,8 @@ public class ComparacionMuebleActivity extends AppCompatActivity {
     private Mueble mueble;
 
     private EditText nombre, medidas, precio, descripcion;
-    private ImageView imagenMueble;
+    private ImageView imagenMueble, imagenEstanteria;
+    private TextView textoEstanteria;
 
     private Button botonEditar, botonActualizar;
 
@@ -60,6 +64,9 @@ public class ComparacionMuebleActivity extends AppCompatActivity {
         descripcion = findViewById(R.id.descripcionComparacionMueble);
 
         imagenMueble = findViewById(R.id.imageComparacionMueble);
+        imagenEstanteria = findViewById(R.id.imageComparacionEstanteria);
+
+        textoEstanteria = findViewById(R.id.textViewEstanteria2);
 
         botonEditar = findViewById(R.id.botonModificarComparacionMueble);
 
@@ -74,7 +81,7 @@ public class ComparacionMuebleActivity extends AppCompatActivity {
         /**
          * no funcionaaaaaaaaaaaa POR EL SIMBOLO DEL EURO!!! CUIDADO, QUITAR SIMBOLO AL GUARDAR, PONER CONDICION DE NO BORRAR EL EURO??
          */
-        botonActualizar.setOnClickListener(new View.OnClickListener() {
+        botonEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 AlertDialog dialogo = new AlertDialog
@@ -132,8 +139,53 @@ public class ComparacionMuebleActivity extends AppCompatActivity {
 
         /**
          * imagenes estanterias cambian segun stock
+         * + IMAGEN SI NO TIENE ESTANTERIA, NO DISPONIBLE O ALGO
          */
+        if(mueble.getEstanteriaId().equals("Sin estanteria")){
+            /**
+             * CAMBIAR CAMPOS ESTANTERIAS, CREARLOS TODOS OTRA VEZ CON VALOR SIN ESTANTERIA SI NO TIENEN!!!
+             */
+            textoEstanteria.setText("");
+            imagenEstanteria.setImageResource(R.drawable.estanteriavacia);
+            /**
+             * cambiar imagen = tachar estanteria, mensaje NO DISPONIBLE
+             */
+            /**
+             * añadir un dialogo!!!
+             */
+        }else{
+            /**
+             * mensaje explicando el 1 = pasillo b= Estanteria!
+             */
+            textoEstanteria.setText(mueble.getEstanteriaId());
 
+            //Buscamos el stock de la estanteria
+            db.collection("estanterias").document(mueble.getEstanteriaId())
+                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            Estanteria estanteria = documentSnapshot.toObject(Estanteria.class);
+                            if (estanteria.getStock() == 0){
+                                //Estantería vacía
+                                imagenEstanteria.setImageResource(R.drawable.estanteriavacia);
+                                /**+
+                                 * dialogo fuera stock!! en las listas!!
+                                 */
+
+                            }else if(estanteria.getStock() == estanteria.getCantMax()){
+                                //Estanteria llena
+                                imagenEstanteria.setImageResource(R.drawable.estanteriallena);
+                                /**
+                                 * notificacion empleado de estanteria llena!! aumentar cantMax
+                                 */
+
+                            }else{
+                                imagenEstanteria.setImageResource(R.drawable.estanteriamedio);
+                            }
+
+                        }
+                    });
+        }
         /**
          * modificar estanterias
          */
@@ -148,14 +200,14 @@ public class ComparacionMuebleActivity extends AppCompatActivity {
                     if (document.exists()) {
                         Usuario usuario = document.toObject(Usuario.class);
                         if (usuario.getIdRol().equals("empleado")) {
-                            botonActualizar.setVisibility(View.VISIBLE);
+                            botonEditar.setVisibility(View.VISIBLE);
                             nombre.setFocusableInTouchMode(true);
                             medidas.setFocusableInTouchMode(true);
                             precio.setFocusableInTouchMode(true);
                             descripcion.setFocusableInTouchMode(true);
 
                         } else { //cliente
-                            botonActualizar.setVisibility(View.GONE);
+                            botonEditar.setVisibility(View.GONE);
                             nombre.setFocusable(false);
                             medidas.setFocusable(false);
                             precio.setFocusable(false);

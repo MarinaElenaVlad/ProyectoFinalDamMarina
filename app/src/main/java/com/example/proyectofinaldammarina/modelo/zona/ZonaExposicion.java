@@ -52,4 +52,9 @@ public class ZonaExposicion {
     public void setImagen(String imagen) {
         this.imagen = imagen;
     }
+
+    @Override
+    public String toString() {
+        return categoria + ", planta: " + planta;
+    }
 }

@@ -19,6 +19,7 @@ import com.example.proyectofinaldammarina.modelo.mueble.DAO.MuebleDAOImpl;
 import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
 import com.example.proyectofinaldammarina.modelo.usuario.DAO.UsuarioDAOImpl;
 import com.example.proyectofinaldammarina.modelo.usuario.Usuario;
+import com.example.proyectofinaldammarina.modelo.zona.ZonaExposicion;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -81,6 +82,25 @@ public class DetalleMuebleActivity extends AppCompatActivity {
         precioMueble.setText(bundle.getDouble("precio") + "€");
         medidasMueble.setText(bundle.getString("medidas"));
         descripcionMueble.setText(bundle.getString("descripcion"));
+
+        /**
+         * MODIFICAR TODOS LOS MUEBLES, UNICO POSIBLE VALOR = SIN ESTANTERIA O UNA
+         */
+        if(bundle.getString("zonaId").equals("Sin estanteria")){
+            zonaMueble.setText("");
+            /**
+             * dialogo "error" = no zona, no a la venta (PROXIMAMENTE)
+             */
+        }else{
+            db.collection("zonas").document(bundle.getString("zonaId")).get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            ZonaExposicion zonaExposicion = documentSnapshot.toObject(ZonaExposicion.class);
+                            zonaMueble.setText(zonaExposicion.getCategoria() + ", planta " + zonaExposicion.getPlanta());
+                        }
+                    });
+        }
 
         Picasso.get().load(bundle.getString("imagen")).into(imagenMueble);
 

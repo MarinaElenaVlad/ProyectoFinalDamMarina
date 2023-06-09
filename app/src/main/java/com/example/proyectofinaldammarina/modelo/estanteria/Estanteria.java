@@ -1,6 +1,8 @@
 package com.example.proyectofinaldammarina.modelo.estanteria;
 
-public class Estanteria {
+import java.io.Serializable;
+
+public class Estanteria implements Serializable {
 
 
     /**
@@ -9,6 +11,13 @@ public class Estanteria {
     private String codigo; //compuesto del cod pasillo
     private int cantMax;
     private int stock;
+
+    public Estanteria() {
+    }
+
+    public Estanteria(String codigo) {
+        this.codigo = codigo;
+    }
 
     public Estanteria(String codigo, int cantMax, int stock) {
         this.codigo = codigo;
@@ -42,6 +51,6 @@ public class Estanteria {
 
     @Override
     public String toString() {
-        return "Estantería " + codigo;
+        return codigo;
     }
 }

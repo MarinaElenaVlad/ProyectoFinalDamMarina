@@ -38,7 +38,16 @@ public class Mueble implements Serializable {
         this.descripcion = descripcion;
     }
 
-
+    public Mueble(String codigoQr, String imagen, String nombre, Double precio, String medidas, String descripcion, String estanteriaId, String zonaId) {
+        this.codigoQr = codigoQr;
+        this.imagen = imagen;
+        this.nombre = nombre;
+        this.precio = precio;
+        this.medidas = medidas;
+        this.descripcion = descripcion;
+        this.estanteriaId = estanteriaId;
+//        this.zonaId = zonaId;
+    }
 
     /**
      * Métodos get y set de cada atributo
