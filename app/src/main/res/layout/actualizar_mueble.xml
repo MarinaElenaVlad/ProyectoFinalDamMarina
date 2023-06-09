@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:text="Actualizar mueble"
+            android:background="@color/pink"
+            android:textSize="25dp"
+            android:gravity="center"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nombre"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"/>
+
+        <EditText
+            android:id="@+id/nombreActualizarMueble"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:text="Texto de prueba"
+            android:textColor="@color/white"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:inputType="text"
+            android:gravity="center"
+            android:background="@drawable/custom_edittext" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Medidas"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            />
+        <EditText
+            android:id="@+id/medidasActualizarMueble"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:text="Texto de prueba"
+            android:textColor="@color/white"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:inputType="text"
+            android:gravity="center"
+            android:background="@drawable/custom_edittext" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Precio"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            />
+        <EditText
+            android:id="@+id/precioActualizarMueble"
+            android:layout_width="match_parent"
+            android:layout_height="35dp"
+            android:text="Texto de prueba"
+            android:textColor="@color/white"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:inputType="numberDecimal"
+            android:gravity="center"
+            android:background="@drawable/custom_edittext" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Descripcion"
+            android:textSize="20dp"
+            android:gravity="center"
+            android:textColor="@color/black"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            />
+        <EditText
+            android:id="@+id/descripcionActualizarMueble"
+            android:layout_width="match_parent"
+            android:layout_height="65dp"
+            android:text="Texto de prueba"
+            android:textColor="@color/white"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:inputType="textMultiLine"
+            android:gravity="center"
+            android:background="@drawable/custom_edittext" />
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/botonModificarMueble"
+            style="@android:style/Widget.Button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="32dp"
+            android:text="Actualizar datos"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:textColor="@color/black"
+            android:background="@color/pink"
+            />
+
+</LinearLayout>

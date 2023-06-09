@@ -10,12 +10,14 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.proyectofinaldammarina.modelo.estanteria.Estanteria;
 import com.example.proyectofinaldammarina.modelo.mueble.DAO.MuebleDAOImpl;
 import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,10 +26,15 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class CrearMuebleActivity extends AppCompatActivity {
@@ -70,6 +77,10 @@ public class CrearMuebleActivity extends AppCompatActivity {
         botonGuardar = findViewById(R.id.botonGuardarMueble);
 
         spinnerEstanteria = findViewById(R.id.spinnerEstanteria);
+
+
+        rellenarSpinnerEstanteria();
+
         spinnerZona = findViewById(R.id.spinnerZona);
 
         imagenSubir.setOnClickListener(new View.OnClickListener() {
@@ -163,5 +174,116 @@ public class CrearMuebleActivity extends AppCompatActivity {
             return true;
         }
     }
+
+    private void rellenarSpinnerEstanteria(){
+
+        final List<Estanteria> list = new ArrayList<>();
+
+        db.collection("estanterias")
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                        if (task.isSuccessful()) {
+                            for (QueryDocumentSnapshot document : task.getResult()) {
+                                Estanteria estanteria = document.toObject(Estanteria.class);
+
+                                //Muestra documentos en los que existe el campo estanteria de MUEBLE!! con el valor con el que se compara
+                                Query referenciasEstanterias = db.collection("muebles").whereEqualTo("estanteriaId", estanteria.getCodigo());
+                                List<Mueble> mueblesConEstanteria = new ArrayList<>();
+
+//                                referenciasEstanterias
+//                                        .get()
+//                                        .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                            @Override
+//                                            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                                if (task.isSuccessful()) {
+//                                                    for (QueryDocumentSnapshot document : task.getResult()) {
+//                                                        Mueble mueble = document.toObject(Mueble.class);
+//                                                        mueblesConEstanteria.add(mueble);
+//                                                    }
+//                                                    if(mueblesConEstanteria.size() == 0){//La estanteria no esta asociada con ningun mueble
+//                                                        list.add(estanteria);
+//                                                   }
+//                                                } else {
+//                                                    Toast.makeText(CrearMuebleActivity.this, "Error getting documents: " + task.getException(), Toast.LENGTH_SHORT).show();
+//                                                }
+//                                            }
+//                                        });
+//
+//                                referenciasEstanterias.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                        if (task.isSuccessful()) {
+//                                            mueblesConEstanteria.clear();
+//                                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                                Mueble mueble = document.toObject(Mueble.class);
+//                                                //error:     java.lang.RuntimeException: Could not deserialize object. Can't convert object of type java.lang.String to type com.example.pruebaescanearqr.modelo.Estanteria (found in field 'estanteria')
+//                                                mueblesConEstanteria.add(mueble);
+//                                                System.out.println("Cod:" + mueble.toString());
+//                                                // list.add(estanteriaRef);
+//                                            }
+//                                            System.out.println(mueblesConEstanteria.size());
+//                                            if(mueblesConEstanteria.size() == 0){//La estanteria no esta asociada con ningun mueble
+//                                                list.add(estanteria);
+//                                            }
+//                                        }
+//                                    }
+//                                });
+                            }
+
+//                            //list tiene las estanterias que no están asociadas a ningun mueble
+//                            ArrayAdapter<Estanteria> arrayAdapter = new ArrayAdapter<>(CrearMuebleActivity.this, android.R.layout.simple_spinner_item, list);
+//                            spinnerEstanteria.setAdapter(arrayAdapter);
+                        } else {
+                            Toast.makeText(CrearMuebleActivity.this, "Error getting documents: " + task.getException(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+//
+//        db.collection("estanterias")
+//                .get()
+//                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                        if (task.isSuccessful()) {
+//                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                Estanteria estanteria = document.toObject(Estanteria.class);
+//
+//                                //Muestra documentos en los que existe el campo estanteria de MUEBLE!! con el valor con el que se compara
+//                                Query referenciasEstanterias = db.collection("muebles").whereEqualTo("estanteriaId", estanteria.getCodigo());
+//                                List<Mueble> mueblesConEstanteria = new ArrayList<>();
+//
+//                                referenciasEstanterias.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//                                    @Override
+//                                    public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                                        if (task.isSuccessful()) {
+//                                            mueblesConEstanteria.clear();
+//                                            for (QueryDocumentSnapshot document : task.getResult()) {
+//                                                Mueble mueble = document.toObject(Mueble.class);
+//                                                //error:     java.lang.RuntimeException: Could not deserialize object. Can't convert object of type java.lang.String to type com.example.pruebaescanearqr.modelo.Estanteria (found in field 'estanteria')
+//                                                mueblesConEstanteria.add(mueble);
+//                                                System.out.println("Cod:" + mueble.toString());
+//                                                // list.add(estanteriaRef);
+//                                            }
+//                                            System.out.println(mueblesConEstanteria.size());
+//                                            if(mueblesConEstanteria.size() == 0){//La estanteria no esta asociada con ningun mueble
+//                                                list.add(estanteria);
+//                                            }
+//                                        }
+//                                    }
+//                                });
+//                            }
+//
+//                            //list tiene las estanterias que no están asociadas a ningun mueble
+//                            ArrayAdapter<Estanteria> arrayAdapter = new ArrayAdapter<>(CrearMuebleActivity.this, android.R.layout.simple_spinner_item, list);
+//                            spinnerEstanteria.setAdapter(arrayAdapter);
+//                        }
+//                    }
+//                });
+
+    }
+
 
 }

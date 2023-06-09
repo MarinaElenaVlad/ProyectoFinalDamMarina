@@ -37,7 +37,7 @@ public class ComparacionMuebleActivity extends AppCompatActivity {
     private EditText nombre, medidas, precio, descripcion;
     private ImageView imagenMueble;
 
-    private Button botonActualizar;
+    private Button botonEditar, botonActualizar;
 
     private FirebaseFirestore db;
 
@@ -61,7 +61,7 @@ public class ComparacionMuebleActivity extends AppCompatActivity {
 
         imagenMueble = findViewById(R.id.imageComparacionMueble);
 
-        botonActualizar = findViewById(R.id.botonModificarComparacionMueble);
+        botonEditar = findViewById(R.id.botonModificarComparacionMueble);
 
         cargarDatos();
 
