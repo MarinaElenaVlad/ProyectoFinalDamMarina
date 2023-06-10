@@ -69,6 +69,7 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.Vista>{
                  * Pruebas, dio una vez error al buscar y dar click, pero luego no!
                  */
                 Intent intent = new Intent(context, DetalleMuebleActivity.class);
+                System.out.println(muebleList.get(position).toString());
                 intent.putExtra("codigo", muebleList.get(position).getCodigoQr());
                 intent.putExtra("nombre", muebleList.get(position).getNombre());
                 intent.putExtra("precio", muebleList.get(position).getPrecio());

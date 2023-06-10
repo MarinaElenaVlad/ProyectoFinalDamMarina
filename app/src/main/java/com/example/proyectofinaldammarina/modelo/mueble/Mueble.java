@@ -46,7 +46,7 @@ public class Mueble implements Serializable {
         this.medidas = medidas;
         this.descripcion = descripcion;
         this.estanteriaId = estanteriaId;
-//        this.zonaId = zonaId;
+        this.zonaId = zonaId;
     }
 
     /**
@@ -125,6 +125,8 @@ public class Mueble implements Serializable {
                 ", precio=" + precio +
                 ", medidas='" + medidas + '\'' +
                 ", descripcion='" + descripcion + '\'' +
+                ", estanteriaId='" + estanteriaId + '\'' +
+                ", zonaId='" + zonaId + '\'' +
                 '}';
     }
 }

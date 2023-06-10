@@ -35,6 +35,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 public class EscanerFragment extends Fragment {
 
@@ -79,11 +80,6 @@ public class EscanerFragment extends Fragment {
                 /**
                  * borrar referencia anterior y sustituir por la nueva? hacer esta comprobacion?
                  */
-                //cargar datos
-//                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-//                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-//                fragmentTransaction.replace(R.id.frame_layout, new HistorialFragment());
-//                fragmentTransaction.commit();
                 startActivity(new Intent(getActivity(), HistorialActivity.class));
             }
         });
@@ -132,47 +128,12 @@ public class EscanerFragment extends Fragment {
                                     if (task.isSuccessful()) {
                                         for (QueryDocumentSnapshot document : task.getResult()) {
                                             historial = document.toObject(Historial.class);
-                                            historial.setIdentificador(document.getId());
                                         }
                                         actualizarHistorial(historial, valorEscaneo);
-//                                        if(historial == null) { //no se ha encontrado el documento
-//                                            historial = new Historial(Arrays.asList(), firebaseAuth.getUid());
-//                                            //no existe en la base de datos
-//                                            //https://stackoverflow.com/questions/47474522/firestore-difference-between-set-and-add
-//                                            db.collection("historial")
-//                                                .add(historial)
-//                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-//                                                    @Override
-//                                                    public void onSuccess(DocumentReference documentReference) {
-//                                                        //se obtiene el id automatico
-//                                                        historial.setIdentificador(documentReference.getId());
-//                                                    }
-//                                                });
-//                                            //Se llama al metodo que actualiza el historial
-//                                            actualizarHistorial(historial, valorEscaneo);
-//                                        }
                                     }else{
                                         Toast.makeText(getActivity(), "Error getting documents:", Toast.LENGTH_LONG).show();
                                     }
                                 }
-                            }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        historial = new Historial(Arrays.asList(), firebaseAuth.getUid());
-                                        //no existe en la base de datos
-                                        //https://stackoverflow.com/questions/47474522/firestore-difference-between-set-and-add
-                                        db.collection("historial")
-                                                .add(historial)
-                                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                    @Override
-                                                    public void onSuccess(DocumentReference documentReference) {
-                                                        //se obtiene el id automatico
-                                                        historial.setIdentificador(documentReference.getId());
-                                                    }
-                                                });
-                                        //Se llama al metodo que actualiza el historial
-                                        actualizarHistorial(historial, valorEscaneo);
-                                    }
                             });
 
                             Mueble mueble = document.toObject(Mueble.class);
@@ -276,8 +237,14 @@ public class EscanerFragment extends Fragment {
     }
 
     private void actualizarHistorial(Historial his, String muebleConsultado){
+
+        if(his.getMuebleList().contains(muebleConsultado)) {
+            //Antes de insertar la nueva referencia borramos la referencia exitente del historial (Para que no se repitan referencias)
+            his.getMuebleList().removeAll(Collections.singleton(muebleConsultado));
+        }
         // Se añade el id del mueble buscado a la lista
         his.getMuebleList().add(muebleConsultado);
+        System.out.println(his.getMuebleList());
         db.collection("historial").document(his.getIdentificador())
                 .update("muebleList", his.getMuebleList()).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
@@ -291,7 +258,6 @@ public class EscanerFragment extends Fragment {
                         Toast.makeText(getActivity(), "Error updating document!!", Toast.LENGTH_LONG).show();
                     }
                 });
+        }
     }
 
-
-}

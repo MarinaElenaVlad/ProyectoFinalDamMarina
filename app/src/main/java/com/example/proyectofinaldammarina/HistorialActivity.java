@@ -21,13 +21,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 public class HistorialActivity extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private ListView listaMostrar;
-    private List<String> listaMuebles;
+    private List<String> listaMuebles = new ArrayList<>();//la inicializamos para que no de error si el historial está vacío
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
@@ -61,16 +62,16 @@ public class HistorialActivity extends AppCompatActivity implements AdapterView.
                             Toast.makeText(HistorialActivity.this, "Error getting documents:", Toast.LENGTH_LONG).show();
                         }
 
-                        if(listaMuebles.size() > 0 || listaMuebles != null) {
+                        if(listaMuebles.size() > 0) {
                             listaMostrar = findViewById(R.id.listaHistorial);
                             ArrayAdapter<String> mueblesAdapter = new ArrayAdapter<String>(HistorialActivity.this,
                                     android.R.layout.simple_list_item_1, listaMuebles);
                             listaMostrar.setAdapter(mueblesAdapter);
+
+                            listaMostrar.setOnItemClickListener(HistorialActivity.this);
                         }else{
                             Toast.makeText(HistorialActivity.this, "HISTORIAL VACÍO", Toast.LENGTH_LONG).show();
                         }
-
-                        listaMostrar.setOnItemClickListener(HistorialActivity.this);
                     }
                 });
     }

@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.proyectofinaldammarina.modelo.historial.DAO.HistorialDAOImpl;
+import com.example.proyectofinaldammarina.modelo.historial.Historial;
 import com.example.proyectofinaldammarina.modelo.usuario.DAO.UsuarioDAOImpl;
 import com.example.proyectofinaldammarina.modelo.usuario.Usuario;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -18,6 +20,8 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.Arrays;
 
 /**
  * AÑADIR EXPLICACION + COMENTARIOS
@@ -68,6 +72,10 @@ public class RegistrarActivity extends AppCompatActivity {
                             try {
                                 UsuarioDAOImpl usuarioDAO = new UsuarioDAOImpl(firebaseFirestore, "usuarios");
                                 usuarioDAO.insertarUsuario(new Usuario(nombre, email,"cliente", ""), FirebaseAuth.getInstance().getUid());
+
+                                HistorialDAOImpl historialDAO = new HistorialDAOImpl(firebaseFirestore, "historial");
+                                historialDAO.crearHistorial(firebaseAuth.getUid());
+
                                 Toast.makeText(RegistrarActivity.this, "¡Cuenta creada con éxito!", Toast.LENGTH_LONG).show();
                                 startActivity(new Intent(RegistrarActivity.this, LoginActivity.class));
 

@@ -86,7 +86,7 @@ public class DetalleMuebleActivity extends AppCompatActivity {
         /**
          * MODIFICAR TODOS LOS MUEBLES, UNICO POSIBLE VALOR = SIN ESTANTERIA O UNA
          */
-        if(bundle.getString("zonaId").equals("Sin estanteria")){
+        if(bundle.getString("zonaId").equals("Sin zona")){
             zonaMueble.setText("");
             /**
              * dialogo "error" = no zona, no a la venta (PROXIMAMENTE)
@@ -104,7 +104,6 @@ public class DetalleMuebleActivity extends AppCompatActivity {
 
         Picasso.get().load(bundle.getString("imagen")).into(imagenMueble);
 
-        String zonaId = bundle.getString("zonaId");
         /**
          * zona + imagenes!!
          */

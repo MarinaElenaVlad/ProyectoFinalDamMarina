@@ -134,7 +134,7 @@ public class CrearMuebleActivity extends AppCompatActivity {
                                  * falta estanteria y zona!!
                                  */
                                 Mueble mueble = new Mueble(idMueble,  uri.toString(), nombre.getText().toString().trim(),
-                                        Double.parseDouble(precio.getText().toString().trim()), medidas.getText().toString().trim() ,descripcion.getText().toString(), idEstanteria, "");
+                                        Double.parseDouble(precio.getText().toString().trim()), medidas.getText().toString().trim() ,descripcion.getText().toString(), idEstanteria, idZona);
 
                                 /**
                                  * ver si sobreescribe!, ponerlo en dao
@@ -276,8 +276,10 @@ public class CrearMuebleActivity extends AppCompatActivity {
                             spinnerZona.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
                                 @Override
                                 public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                                    //Se obtiene el código de la estantería seleccionada
-                                    idZona = parent.getItemAtPosition(position).toString();
+                                    //Se obtiene el código de la estantería seleccionada (pone lo del toString)
+                                    ZonaExposicion zona = (ZonaExposicion) parent.getItemAtPosition(position);
+                                    idZona = zona.getCodigo();
+                                    Toast.makeText(CrearMuebleActivity.this, idZona, Toast.LENGTH_SHORT).show();
                                 }
 
                                 @Override

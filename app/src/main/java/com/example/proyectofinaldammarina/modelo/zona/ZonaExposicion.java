@@ -3,8 +3,9 @@ package com.example.proyectofinaldammarina.modelo.zona;
 public class ZonaExposicion {
 
     private String codigo;
-    private String planta;
     private String categoria;
+
+    private String planta;
     private String imagen;
 
     //constructor sin parametros
@@ -12,10 +13,10 @@ public class ZonaExposicion {
     }
 
     //constructor con parametros
-    public ZonaExposicion(String codigo, String planta, String categoria, String imagen) {
+    public ZonaExposicion(String codigo, String categoria, String planta, String imagen) {
         this.codigo = codigo;
-        this.planta = planta;
         this.categoria = categoria;
+        this.planta = planta;
         this.imagen = imagen;
     }
 
