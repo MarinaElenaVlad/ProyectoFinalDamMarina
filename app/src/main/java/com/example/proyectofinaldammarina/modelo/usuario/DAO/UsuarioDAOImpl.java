@@ -65,6 +65,26 @@ public class UsuarioDAOImpl implements IUsuarioDAO {
         });
     }
 
+    @Override
+    public void actualizarNombrePerfil(String id, String nombre, Context context) {
+        DocumentReference usuarioReferencia = database.collection(nombreColeccion).document(id);
+
+        /**
+         * campo mismo nombre que el de la bd, sino te crea uno nuevo!
+         */
+        usuarioReferencia.update("nombre", nombre).addOnCompleteListener(new OnCompleteListener<Void>() {
+           @Override
+           public void onComplete(@NonNull Task<Void> task) {
+               if (task.isSuccessful()){
+                   Toast.makeText(context, "Campo/s actualizados.", Toast.LENGTH_SHORT).show();
+                   context.startActivity(new Intent(context, MenuActivity.class));
+               }else{
+                   Toast.makeText(context, "Error al actualizar", Toast.LENGTH_SHORT).show();
+               }
+           }
+        });
+    }
+
 //    @Override
 //    public String devolverRolUsuario(String key) {
 //        /**

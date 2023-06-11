@@ -3,6 +3,7 @@ package com.example.proyectofinaldammarina;
 import android.app.Dialog;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -10,6 +11,7 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
 import android.view.Gravity;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -93,20 +96,11 @@ public class PerfilFragment extends Fragment {
 
         botonActualizar = root.findViewById(R.id.botonActualizarPerfil);
 
-        imagenUsuario.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Se obtiene una imagen de la galeria
-                activityResultLauncher.launch("image/*");
-
-            }
-        });
-
         botonActualizar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Este método la guarda en el storage y la asocia con su documento en la base de datos
-                actualizarFoto();
+                actualizarPerfil();
             }
         });
 
@@ -142,53 +136,85 @@ public class PerfilFragment extends Fragment {
 
     }
 
-    ActivityResultLauncher activityResultLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
-            new ActivityResultCallback<Uri>() {
-                @Override
-                public void onActivityResult(Uri result) {
-                    if(result != null){
-                        imagenUsuario.setImageURI(result);
-                        uriImagen = result;
-                    }
-                }
-    });
+    ImageView imagenActualizar;
 
     /***
      * controlar no insertar dos veces misma foto?? deselecciona y vuelve a seleccionar la misma??
      */
-    private void actualizarFoto(){
+    private void actualizarPerfil(){
         final Dialog dialog = new Dialog(getActivity());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.actualizar_perfil);
+
+        AppCompatButton botonGuardar;
+        EditText nombrePerfil;
+
+        nombrePerfil = dialog.findViewById(R.id.nombreActualizarPerfil);
+        botonGuardar = dialog.findViewById(R.id.botonModificarPerfil);
+        imagenActualizar = dialog.findViewById(R.id.imagenActualizarPerfil);
+
+        nombrePerfil.setText(nombre.getText().toString().trim());
+
+        botonGuardar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(uriImagen != null && !nombrePerfil.getText().toString().trim().isEmpty()){
+                    StorageReference reference = storage.getReference().child("perfiles/" + UUID.randomUUID().toString());
+                    reference.putFile(uriImagen).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if(task.isSuccessful()){
+                                reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        UsuarioDAOImpl usuarioDAO = new UsuarioDAOImpl(db, "usuarios");
+                                        usuarioDAO.actualizarFotoPerfil(firebaseAuth.getUid(), uri.toString(), getActivity());
+                                        usuarioDAO.actualizarNombrePerfil(firebaseAuth.getUid(), nombrePerfil.getText().toString().trim(), getActivity());
+                                    }
+                                });
+
+                            }else{
+                                Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+                }else{
+                    Toast.makeText(getContext(), "Seleccione una nueva foto y/o escriba un nombre!", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+
+        imagenActualizar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Se obtiene una imagen de la galeria
+                activityResultLauncher.launch("image/*");
+
+            }
+        });
+
+        /**
+         * AL BORRAR FOTO QUE SE BORRE REFERENCIA (STORAGE)
+         */
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         dialog.getWindow().getAttributes().windowAnimations = R.style.animacionDialogo;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
-
-//        if(uriImagen != null){
-//            StorageReference reference = storage.getReference().child("perfiles/" + UUID.randomUUID().toString());
-//            reference.putFile(uriImagen).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-//                @Override
-//                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-//                    if(task.isSuccessful()){
-//                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-//                            @Override
-//                            public void onSuccess(Uri uri) {
-//                                UsuarioDAOImpl usuarioDAO = new UsuarioDAOImpl(db, "usuarios");
-//                                usuarioDAO.actualizarFotoPerfil(firebaseAuth.getUid(), uri.toString(), getActivity());
-//                            }
-//                        });
-//
-//                    }else{
-//                        Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            });
-//
-//        }else{
-//            Toast.makeText(getContext(), "Seleccione una nueva foto!", Toast.LENGTH_LONG).show();
-//        }
     }
+
+    ActivityResultLauncher activityResultLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
+            new ActivityResultCallback<Uri>() {
+                @Override
+                public void onActivityResult(Uri result) {
+                    if(result != null){
+                        imagenActualizar.setImageURI(result);
+                        uriImagen = result;
+                    }
+                }
+            });
+
 }

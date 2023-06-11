@@ -18,6 +18,8 @@ public interface IUsuarioDAO {
 
    public void actualizarFotoPerfil(String id, String imagenUri, Context context);
 
+   public void actualizarNombrePerfil(String id, String nombre, Context context);
+
 
 
 }
