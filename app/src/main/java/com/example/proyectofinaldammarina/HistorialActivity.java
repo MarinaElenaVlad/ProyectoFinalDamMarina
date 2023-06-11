@@ -74,6 +74,9 @@ public class HistorialActivity extends AppCompatActivity implements AdapterView.
                         }
                     }
                 });
+        /**
+         * PONER MENSAJE SI EL MUEBLE YA NO EXISTE!!
+         */
     }
 
     //https://www.youtube.com/watch?v=NhiUTjm2BrE

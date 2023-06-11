@@ -5,10 +5,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -22,6 +28,7 @@ import com.example.proyectofinaldammarina.modelo.usuario.Usuario;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -37,11 +44,12 @@ public class ComparacionMuebleActivity extends AppCompatActivity {
      */
     private Mueble mueble;
 
-    private EditText nombre, medidas, precio, descripcion;
+    private TextView nombre, medidas, precio, descripcion, textoEstanteria;
     private ImageView imagenMueble, imagenEstanteria;
-    private TextView textoEstanteria;
 
-    private Button botonEditar, botonActualizar;
+    private Button botonEditar;
+
+    private BottomSheetDialog dialog;
 
     private FirebaseFirestore db;
 
@@ -77,48 +85,100 @@ public class ComparacionMuebleActivity extends AppCompatActivity {
         /**
          * borrar del historial si no existe ese mueble (se ha borrado)
          */
-
+        
         /**
          * no funcionaaaaaaaaaaaa POR EL SIMBOLO DEL EURO!!! CUIDADO, QUITAR SIMBOLO AL GUARDAR, PONER CONDICION DE NO BORRAR EL EURO??
          */
         botonEditar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog dialogo = new AlertDialog
-                        .Builder(ComparacionMuebleActivity.this)
-                        .setPositiveButton("Sí, modificar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Mueble mueb = new Mueble(mueble.getCodigoQr(), mueble.getImagen(),
-                                        nombre.getText().toString(), Double.parseDouble(precio.getText().toString()),
-                                        medidas.getText().toString(), descripcion.getText().toString());
-                                MuebleDAOImpl muebleDAO = new MuebleDAOImpl(db, "muebles");
-                                muebleDAO.actualizarMueble(mueb.getCodigoQr(), mueb, ComparacionMuebleActivity.this);
-                                startActivity(new Intent(ComparacionMuebleActivity.this, MenuActivity.class));
-                                /**
-                                 * cuidado con precio, dolar!! + ver si update cambia o sustituye tood!!
-                                 * +codigo qr obligatorio al añadir + todos campos, QUITAR IMAGEN CONSTRUCTOR
-                                 * VER SI PONE NULL O MATIENE + quitar signo euro!!!!
-                                 * controlar tipo de dato edittext
-                                 */
-                            }
-
-                        })
-                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Hicieron click en el botón negativo, no confirmaron
-                                // Simplemente se descarta el diálogo
-                                dialog.dismiss();
-                            }
-                        })
-                        .setTitle("Confirmar") // El título
-                        .setMessage("¿Desea modificar los datos de este mueble?") // El mensaje
-                        .create();
-                dialogo.show();
+                showDialog();
             }
         });
 
+    }
+
+    private void showDialog() {
+
+        final Dialog dialog = new Dialog(ComparacionMuebleActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.actualizar_mueble);
+
+        TextView nombreActualizar, medidasActualizar, precioActualizar, descripcionActualizar;
+        Button guardarCambios;
+
+        nombreActualizar = dialog.findViewById(R.id.nombreActualizarMueble);
+        medidasActualizar = dialog.findViewById(R.id.medidasActualizarMueble);
+        precioActualizar = dialog.findViewById(R.id.precioActualizarMueble);
+        descripcionActualizar = dialog.findViewById(R.id.descripcionActualizarMueble);
+        guardarCambios = dialog.findViewById(R.id.botonModificarMueble);
+
+        nombreActualizar.setText(mueble.getNombre());
+        medidasActualizar.setText(mueble.getMedidas());
+        precioActualizar.setText(mueble.getPrecio().toString());
+        descripcionActualizar.setText(mueble.getDescripcion());
+
+        guardarCambios.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!estaVacio(nombreActualizar.getText().toString().trim(), medidasActualizar.getText().toString().trim(),
+                        precioActualizar.getText().toString().trim(), descripcionActualizar.getText().toString().trim())){
+                    AlertDialog dialogo = new AlertDialog
+                            .Builder(ComparacionMuebleActivity.this)
+                            .setPositiveButton("Sí, modificar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Mueble mueb = new Mueble(mueble.getCodigoQr(), mueble.getImagen(),
+                                            nombreActualizar.getText().toString().trim(), Double.parseDouble(precioActualizar.getText().toString().trim()),
+                                            medidasActualizar.getText().toString().trim(), descripcionActualizar.getText().toString().trim());
+                                    MuebleDAOImpl muebleDAO = new MuebleDAOImpl(db, "muebles");
+                                    muebleDAO.actualizarMueble(mueb.getCodigoQr(), mueb, ComparacionMuebleActivity.this);
+                                    dialog.dismiss();
+                                    startActivity(new Intent(ComparacionMuebleActivity.this, MenuActivity.class));
+                                    /**
+                                     * cuidado con precio, dolar!! + ver si update cambia o sustituye tood!!
+                                     * +codigo qr obligatorio al añadir + todos campos, QUITAR IMAGEN CONSTRUCTOR
+                                     * VER SI PONE NULL O MATIENE + quitar signo euro!!!!
+                                     * controlar tipo de dato edittext
+                                     */
+                                }
+
+                            })
+                            .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Hicieron click en el botón negativo, no confirmaron
+                                    // Simplemente se descarta el diálogo
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setTitle("Confirmar") // El título
+                            .setMessage("¿Desea modificar los datos de este mueble?") // El mensaje
+                            .create();
+                    dialogo.show();
+
+                }else{
+                    Toast.makeText(ComparacionMuebleActivity.this, "Los campos no pueden estar vacios", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.animacionDialogo;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+
+
+    }
+
+    private boolean estaVacio(String nombre, String medidas, String precio, String descripcion){
+        if(nombre.isEmpty() || medidas.isEmpty() || precio.isEmpty() || descripcion.isEmpty()){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     private void cargarDatos(){
@@ -201,17 +261,10 @@ public class ComparacionMuebleActivity extends AppCompatActivity {
                         Usuario usuario = document.toObject(Usuario.class);
                         if (usuario.getIdRol().equals("empleado")) {
                             botonEditar.setVisibility(View.VISIBLE);
-                            nombre.setFocusableInTouchMode(true);
-                            medidas.setFocusableInTouchMode(true);
-                            precio.setFocusableInTouchMode(true);
-                            descripcion.setFocusableInTouchMode(true);
 
                         } else { //cliente
                             botonEditar.setVisibility(View.GONE);
-                            nombre.setFocusable(false);
-                            medidas.setFocusable(false);
-                            precio.setFocusable(false);
-                            descripcion.setFocusable(false);
+
                         }
                     }
                 }

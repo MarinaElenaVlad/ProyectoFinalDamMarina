@@ -1,5 +1,8 @@
 package com.example.proyectofinaldammarina;
 
+import android.app.Dialog;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -9,9 +12,11 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -152,28 +157,38 @@ public class PerfilFragment extends Fragment {
      * controlar no insertar dos veces misma foto?? deselecciona y vuelve a seleccionar la misma??
      */
     private void actualizarFoto(){
-        if(uriImagen != null){
-            StorageReference reference = storage.getReference().child("perfiles/" + UUID.randomUUID().toString());
-            reference.putFile(uriImagen).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    if(task.isSuccessful()){
-                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                            @Override
-                            public void onSuccess(Uri uri) {
-                                UsuarioDAOImpl usuarioDAO = new UsuarioDAOImpl(db, "usuarios");
-                                usuarioDAO.actualizarFotoPerfil(firebaseAuth.getUid(), uri.toString(), getActivity());
-                            }
-                        });
+        final Dialog dialog = new Dialog(getActivity());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.actualizar_perfil);
 
-                    }else{
-                        Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.animacionDialogo;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
 
-        }else{
-            Toast.makeText(getContext(), "Seleccione una nueva foto!", Toast.LENGTH_LONG).show();
-        }
+//        if(uriImagen != null){
+//            StorageReference reference = storage.getReference().child("perfiles/" + UUID.randomUUID().toString());
+//            reference.putFile(uriImagen).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+//                @Override
+//                public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+//                    if(task.isSuccessful()){
+//                        reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+//                            @Override
+//                            public void onSuccess(Uri uri) {
+//                                UsuarioDAOImpl usuarioDAO = new UsuarioDAOImpl(db, "usuarios");
+//                                usuarioDAO.actualizarFotoPerfil(firebaseAuth.getUid(), uri.toString(), getActivity());
+//                            }
+//                        });
+//
+//                    }else{
+//                        Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//            });
+//
+//        }else{
+//            Toast.makeText(getContext(), "Seleccione una nueva foto!", Toast.LENGTH_LONG).show();
+//        }
     }
 }

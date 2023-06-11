@@ -4,15 +4,24 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.proyectofinaldammarina.modelo.mueble.DAO.MuebleDAOImpl;
@@ -34,9 +43,7 @@ import com.squareup.picasso.Picasso;
 public class DetalleMuebleActivity extends AppCompatActivity {
 
     // Se declaran variables
-    private EditText nombreMueble, precioMueble, medidasMueble, descripcionMueble;
-
-    private TextView zonaMueble;
+    private TextView nombreMueble, precioMueble, medidasMueble, descripcionMueble,  zonaMueble;
     private ImageView imagenMueble, imagenZona;
 
     private FirebaseAuth firebaseAuth;
@@ -44,9 +51,12 @@ public class DetalleMuebleActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
-    private FloatingActionButton botonEliminar, botonModificar;
+    private FloatingActionButton botonEliminar;
+    private AppCompatButton botonModificar;
 
     private EditText editMueble;
+
+    private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +85,7 @@ public class DetalleMuebleActivity extends AppCompatActivity {
         //editMueble = findViewById(R.id.editMueble);
 
         // Se reciben los datos del fragment lista
-        Bundle bundle = getIntent().getExtras();
+        bundle = getIntent().getExtras();
 
         String codigoQr = bundle.getString("codigo");
         nombreMueble.setText(bundle.getString("nombre"));
@@ -125,20 +135,20 @@ public class DetalleMuebleActivity extends AppCompatActivity {
                                     botonEliminar.setVisibility(View.VISIBLE);
                                     botonModificar.setVisibility(View.VISIBLE);
                                     //editMueble.setFocusableInTouchMode(true);
-                                    nombreMueble.setFocusableInTouchMode(true);
-                                    precioMueble.setFocusableInTouchMode(true);
-                                    medidasMueble.setFocusableInTouchMode(true);
-                                    descripcionMueble.setFocusableInTouchMode(true);
-                                    zonaMueble.setFocusableInTouchMode(true);
+//                                    nombreMueble.setFocusableInTouchMode(true);
+//                                    precioMueble.setFocusableInTouchMode(true);
+//                                    medidasMueble.setFocusableInTouchMode(true);
+//                                    descripcionMueble.setFocusableInTouchMode(true);
+//                                    zonaMueble.setFocusableInTouchMode(true);
                                 } else {
                                     Toast.makeText(DetalleMuebleActivity.this, "cliente", Toast.LENGTH_LONG).show();
                                     botonEliminar.setVisibility(View.GONE);
                                     botonModificar.setVisibility(View.GONE);
-                                    nombreMueble.setFocusable(false);
-                                    precioMueble.setFocusable(false);
-                                    medidasMueble.setFocusable(false);
-                                    descripcionMueble.setFocusable(false);
-                                    zonaMueble.setFocusable(false);
+//                                    nombreMueble.setFocusable(false);
+//                                    precioMueble.setFocusable(false);
+//                                    medidasMueble.setFocusable(false);
+//                                    descripcionMueble.setFocusable(false);
+//                                    zonaMueble.setFocusable(false);
 
                                 }
                             }
@@ -195,41 +205,122 @@ public class DetalleMuebleActivity extends AppCompatActivity {
         botonModificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog dialogo = new AlertDialog
-                        .Builder(DetalleMuebleActivity.this)
-                        .setPositiveButton("Sí, modificar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                MuebleDAOImpl muebleDAO = new MuebleDAOImpl(db, "muebles");
-                                Mueble mueble = new Mueble(codigoQr, "",
-                                        nombreMueble.getText().toString(), Double.parseDouble(precioMueble.getText().toString()),
-                                        medidasMueble.getText().toString(), descripcionMueble.getText().toString());
-                                muebleDAO.actualizarMueble(codigoQr, mueble, DetalleMuebleActivity.this);
-                                startActivity(new Intent(DetalleMuebleActivity.this, MenuActivity.class));
-                                /**
-                                 * cuidado con precio, dolar!! + ver si update cambia o sustituye tood!!
-                                 * +codigo qr obligatorio al añadir + todos campos, QUITAR IMAGEN CONSTRUCTOR
-                                 * VER SI PONE NULL O MATIENE + quitar signo euro!!!!
-                                 * controlar tipo de dato edittext
-                                 */
-                            }
-
-
-                        })
-                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                // Hicieron click en el botón negativo, no confirmaron
-                                // Simplemente se descarta el diálogo
-                                dialog.dismiss();
-                            }
-                        })
-                        .setTitle("Confirmar") // El título
-                        .setMessage("¿Desea modificar los datos de este mueble?") // El mensaje
-                        .create();
-                dialogo.show();
+                 showDialog();
+//                AlertDialog dialogo = new AlertDialog
+//                        .Builder(DetalleMuebleActivity.this)
+//                        .setPositiveButton("Sí, modificar", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                MuebleDAOImpl muebleDAO = new MuebleDAOImpl(db, "muebles");
+//                                Mueble mueble = new Mueble(codigoQr, "",
+//                                        nombreMueble.getText().toString(), Double.parseDouble(precioMueble.getText().toString()),
+//                                        medidasMueble.getText().toString(), descripcionMueble.getText().toString());
+//                                muebleDAO.actualizarMueble(codigoQr, mueble, DetalleMuebleActivity.this);
+//                                startActivity(new Intent(DetalleMuebleActivity.this, MenuActivity.class));
+//                                /**
+//                                 * cuidado con precio, dolar!! + ver si update cambia o sustituye tood!!
+//                                 * +codigo qr obligatorio al añadir + todos campos, QUITAR IMAGEN CONSTRUCTOR
+//                                 * VER SI PONE NULL O MATIENE + quitar signo euro!!!!
+//                                 * controlar tipo de dato edittext
+//                                 */
+//                            }
+//
+//
+//                        })
+//                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                // Hicieron click en el botón negativo, no confirmaron
+//                                // Simplemente se descarta el diálogo
+//                                dialog.dismiss();
+//                            }
+//                        })
+//                        .setTitle("Confirmar") // El título
+//                        .setMessage("¿Desea modificar los datos de este mueble?") // El mensaje
+//                        .create();
+//                dialogo.show();
             }
         });
+    }
+
+    private void showDialog() {
+        final Dialog dialog = new Dialog(DetalleMuebleActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.actualizar_mueble);
+
+        TextView nombreActualizar, medidasActualizar, precioActualizar, descripcionActualizar;
+        Button guardarCambios;
+
+        nombreActualizar = dialog.findViewById(R.id.nombreActualizarMueble);
+        medidasActualizar = dialog.findViewById(R.id.medidasActualizarMueble);
+        precioActualizar = dialog.findViewById(R.id.precioActualizarMueble);
+        descripcionActualizar = dialog.findViewById(R.id.descripcionActualizarMueble);
+        guardarCambios = dialog.findViewById(R.id.botonModificarMueble);
+
+        nombreActualizar.setText(bundle.getString("nombre"));
+        medidasActualizar.setText(bundle.getString("medidas"));
+        precioActualizar.setText(bundle.getDouble("precio") + "");
+        descripcionActualizar.setText(bundle.getString("descripcion"));
+
+        guardarCambios.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!estaVacio(nombreActualizar.getText().toString().trim(), medidasActualizar.getText().toString().trim(),
+                        precioActualizar.getText().toString().trim(), descripcionActualizar.getText().toString().trim())){
+                    AlertDialog dialogo = new AlertDialog
+                            .Builder(DetalleMuebleActivity.this)
+                            .setPositiveButton("Sí, modificar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    Mueble mueb = new Mueble(bundle.getString("codigo"), bundle.getString("imagen"),
+                                            nombreActualizar.getText().toString().trim(), Double.parseDouble(precioActualizar.getText().toString().trim()),
+                                            medidasActualizar.getText().toString().trim(), descripcionActualizar.getText().toString().trim());
+                                    MuebleDAOImpl muebleDAO = new MuebleDAOImpl(db, "muebles");
+                                    muebleDAO.actualizarMueble(mueb.getCodigoQr(), mueb, DetalleMuebleActivity.this);
+                                    dialog.dismiss();
+                                    startActivity(new Intent(DetalleMuebleActivity.this, MenuActivity.class));
+                                    /**
+                                     * cuidado con precio, dolar!! + ver si update cambia o sustituye tood!!
+                                     * +codigo qr obligatorio al añadir + todos campos, QUITAR IMAGEN CONSTRUCTOR
+                                     * VER SI PONE NULL O MATIENE + quitar signo euro!!!!
+                                     * controlar tipo de dato edittext
+                                     */
+                                }
+
+                            })
+                            .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    // Hicieron click en el botón negativo, no confirmaron
+                                    // Simplemente se descarta el diálogo
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setTitle("Confirmar") // El título
+                            .setMessage("¿Desea modificar los datos de este mueble?") // El mensaje
+                            .create();
+                    dialogo.show();
+
+                }else{
+                    Toast.makeText(DetalleMuebleActivity.this, "Los campos no pueden estar vacios", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+
+        dialog.show();
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().getAttributes().windowAnimations = R.style.animacionDialogo;
+        dialog.getWindow().setGravity(Gravity.BOTTOM);
+    }
+
+    private boolean estaVacio(String nombre, String medidas, String precio, String descripcion){
+        if(nombre.isEmpty() || medidas.isEmpty() || precio.isEmpty() || descripcion.isEmpty()){
+            return true;
+        }else{
+            return false;
+        }
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

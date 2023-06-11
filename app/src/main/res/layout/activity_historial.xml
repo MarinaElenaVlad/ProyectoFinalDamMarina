@@ -13,7 +13,8 @@
         android:id="@+id/textoHistorial"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="HISTORIAL"
+        android:text="HISTORIAL MUEBLES ESCANEADOS"
+        android:textAlignment="center"
         android:textColor="@android:color/holo_blue_dark"
         android:textSize="32sp"
         android:layout_marginBottom="5dp"/>
