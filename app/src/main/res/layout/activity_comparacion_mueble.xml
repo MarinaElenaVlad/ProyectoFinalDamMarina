@@ -11,9 +11,9 @@
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/toolbar"
+        android:id="@+id/toolbarComparacion"
         android:background="@color/blue"
-        app:logo="@drawable/ic_baseline_local_cafe_24"
+        app:logo="@drawable/ic_baseline_historial"
         app:title="Nombre aplicación"
         app:titleMarginStart="30dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"

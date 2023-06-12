@@ -28,11 +28,13 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-
+/**
+ * Fragment que se agrega dentro del activity del menú cuando se pulsa
+ * la opción 'Lista muebles' del navegador inferior que está en la barra inferior
+ */
 public class ListaFragment extends Fragment {
 
-    //Agenda clase!! proyecto tutorial
-
+    // Se declaran las variables
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
 
@@ -42,6 +44,9 @@ public class ListaFragment extends Fragment {
 
     private SearchView searchView;
 
+    /**
+     * Constructor vacío
+     */
     public ListaFragment() {
     }
 
@@ -51,12 +56,11 @@ public class ListaFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_lista, container, false);
 
         firebaseAuth = FirebaseAuth.getInstance();
-       //Toast.makeText(getContext(), firebaseAuth.getUid(), Toast.LENGTH_LONG).show();
-
         db = FirebaseFirestore.getInstance();
 
         muebleList = new ArrayList<>();
 
+        // Se asocian las variables con los elementos xml del layout asociado a este activity
         searchView = root.findViewById(R.id.barraBusquedaLista);
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {

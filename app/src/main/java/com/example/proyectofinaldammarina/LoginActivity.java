@@ -3,6 +3,8 @@ package com.example.proyectofinaldammarina;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,7 +23,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
- * AÑADIR EXPLICACION + COMENTARIOS
+ * Clase ejecutable que controla los eventos de la primera pantalla (XML) de la aplicacion (Login).
  */
 public class LoginActivity extends AppCompatActivity {
 
@@ -32,14 +34,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private FirebaseAuth firebaseAuth;
 
-    private FirebaseFirestore firebaseFirestore;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        // Se inicializan variables
         firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
 
         // Se asocian las variables con los elementos xml del layout asociado a este activity
         campoEmail = findViewById(R.id.login_email);
@@ -58,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                 String email = campoEmail.getText().toString().trim();
                 String password = campoPassword.getText().toString().trim();
 
+                // Se comprueba que no se manden cadenas vacías
                 boolean emailCorrecto = comprobarEmail(email, campoEmail);
                 boolean passwordCorrecta = comprobarPassword(password, campoPassword);
 
@@ -66,12 +67,10 @@ public class LoginActivity extends AppCompatActivity {
                     .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            //Enviar rol + usuario, decidir que se muestra y que no
-                            //uid usuario
+                            //Se accede al menú de la aplicación
                             Toast.makeText(LoginActivity.this, "Login exitoso", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(LoginActivity.this, MenuActivity.class);
-                            intent.putExtra("uid", FirebaseAuth.getInstance().getUid()); //mandamos llave bd firestore
-
+//                            intent.putExtra("uid", FirebaseAuth.getInstance().getUid()); //mandamos llave bd firestore
                             startActivity(intent);
                             startActivity(new Intent(LoginActivity.this, MenuActivity.class));
                         }
@@ -79,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "Login fallido: " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
                 }
@@ -88,44 +87,52 @@ public class LoginActivity extends AppCompatActivity {
 
 
         /**
-         * Se controla el evento que ocurre cuando se pulsa el text view.
+         * Se controla el evento que ocurre cuando se pulsa el text view
+         * con la pregunta de si se ha olvidado la contraseña.
          * Se reseteará la contraseña del usuario.
          */
         textoResetearPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String email = campoEmail.getText().toString().trim();
-                if(!email.isEmpty()) {
-                    firebaseAuth.sendPasswordResetEmail(email)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void unused) {
-                                Toast.makeText(LoginActivity.this, "Email enviado.", Toast.LENGTH_LONG).show();
-//                                // Se cambia la contraseña en el documento de firestore
-//                                UsuarioDAOImpl usuarioDAO = new UsuarioDAOImpl(firebaseFirestore, "usuarios");
-//                                try{
-//                                   // usuarioDAO.actualizarPassword(firebaseAuth.getCurrentUser().getUid(), firebaseAuth.getCurrentUser().getP);
-//                                }catch (Exception e){
-//                                    //Mensaje de errorr
-//                                    Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-//                                }
-                            }
-                        }).addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-
-                            }
-                        });
-                }else{
-                    campoEmail.setError("Introduzca el email para poder resetear la contraseña.");
-                }
+                AlertDialog dialogo = new AlertDialog
+                        .Builder(LoginActivity.this).setPositiveButton("Sí, resetear", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if(!email.isEmpty()) {
+                            firebaseAuth.sendPasswordResetEmail(email)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(LoginActivity.this, "Email enviado.", Toast.LENGTH_LONG).show();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Toast.makeText(LoginActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
+                                        }
+                                    });
+                        }else{
+                            campoEmail.setError("Introduzca el email para poder resetear la contraseña.");
+                        }
+                    }
+                }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                        Toast.makeText(LoginActivity.this, "Reseteo cancelado.", Toast.LENGTH_LONG).show();
+                    }
+                }).setTitle("Confirmar") // El título
+                        .setMessage("¿Quiere resetear su contraseña?") // El mensaje
+                        .create();
+                dialogo.show();
             }
         });
 
 
         /**
          * Se controla el evento que ocurre cuando se pulsa el text view
+         * en el que pone '¿No tiene una cuenta? ¡Regístrese!'
          */
         textoRegistrar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -138,8 +145,8 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     /**
-     * Método para comprobar el email es una cadena vacía, si lo es
-     * se mostrará un error en el campo del email.
+     * Método para comprobar si el email es una cadena vacía, si lo es
+     * se mostrará un error al lado del campo del email.
      * @param email
      * @param campoEmail
      * @return boolean

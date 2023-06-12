@@ -5,16 +5,14 @@ import android.content.Context;
 import com.example.proyectofinaldammarina.modelo.usuario.Usuario;
 
 /**
- * comentario
+ * Interfaz específica para la clase Usuario.
+ * Recordemos que las interfaces no tienen constructor
+ * y que todos sus métodos son abstractos (No tienen
+ * definición, sólo declaramos su estructura en la interfaz).
  */
 public interface IUsuarioDAO {
 
    public Usuario insertarUsuario(Usuario usuario, String idNuevoUsuario);
-
-   //Actualizar contraseña
-//   public void actualizarPassword(String idUsuario, String nuevaPassword);
-
-//   public String devolverRolUsuario(String key);
 
    public void actualizarFotoPerfil(String id, String imagenUri, Context context);
 

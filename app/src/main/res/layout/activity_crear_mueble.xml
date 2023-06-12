@@ -18,7 +18,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/toolbarDetalleMueble"
                 android:background="@color/blue"
-                app:logo="@drawable/ic_baseline_local_cafe_24"
+                app:logo="@drawable/ic_baseline_historial"
                 app:title="Crear mueble"
                 app:titleMarginStart="30dp"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"

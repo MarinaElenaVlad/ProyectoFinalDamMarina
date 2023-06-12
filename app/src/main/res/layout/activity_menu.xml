@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/brown"
     tools:context=".MenuActivity">
 
     <FrameLayout
@@ -12,14 +11,13 @@
         android:layout_height="match_parent"
         android:id="@+id/frame_layout"/>
 
-<!--    PONER LOGO APLICACION!!-->
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar"
         android:background="@color/blue"
-        app:logo="@drawable/ic_baseline_local_cafe_24"
-        app:title="Nombre aplicación"
+        app:logo="@drawable/ic_baseline_chair_24"
+        app:title="Menú"
         app:titleMarginStart="30dp"
         android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
         app:popupTheme="@style/Theme.AppCompat.Light"
@@ -35,11 +33,11 @@
         app:fabCradleRoundedCornerRadius="50dp">
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:id="@+id/barraNavigationBottom"
             android:background="@android:color/transparent"
-            android:layout_marginEnd="5dp"
+            android:layout_marginEnd="20dp"
             app:menu="@menu/bottom_menu"/>
 
     </com.google.android.material.bottomappbar.BottomAppBar>

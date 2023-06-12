@@ -8,6 +8,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -31,60 +33,67 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
- * HACER ESTO EN UNA RAMA APARTE Y LUEGO JUNTARLA, POR SI TE EQUIVOCAS, mirar video!!
- *
- * USUARIO != NULL, VIDEO !MIRAR !
+ * Clase que controla los eventos del menú (XML) de la aplicación.
  */
 
 public class MenuActivity extends AppCompatActivity {
 
-    private FirebaseAuth firebaseAuth;
-
+    // Se declaran variables
     private BottomNavigationView bottomNavigationView;
 
     private Toolbar toolbar;
 
-    private FirebaseFirestore db;
-
+    private FirebaseAuth firebaseAuth;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
+
         firebaseAuth = FirebaseAuth.getInstance();
 
+        // Se asocian las variables con los elementos xml del layout asociado a este activity
         bottomNavigationView = findViewById(R.id.barraNavigationBottom);
-
         toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
-        //Toast.makeText(MenuActivity.this, firebaseAuth.getUid(), Toast.LENGTH_LONG).show();
+        // Esta comparación sirve si un usuario hace logout e intenta volver al intent anterior
+        // Esto no le permitirá acceder
+        if(firebaseAuth.getCurrentUser() != null) {
+            setSupportActionBar(toolbar);
 
-        // Cuando se carga el menú la opción "Inicio" está marcada por defecto
-        reemplazarFragment(new InicioFragment());
-        bottomNavigationView.setBackground(null);
+            // Cuando se carga el menú el fragment "Inicio" está marcada por defecto
+            reemplazarFragment(new InicioFragment());
+            bottomNavigationView.setBackground(null);
 
-        bottomNavigationView.setOnItemSelectedListener(item -> {
-            switch (item.getItemId()){
-                case R.id.inicio:
-                    reemplazarFragment(new InicioFragment());
-                    break;
-                case R.id.escanearQr:
-                    reemplazarFragment(new EscanerFragment());
-                    break;
-                case R.id.listaMuebles:
-                    reemplazarFragment(new ListaFragment());
-                    break;
-                case R.id.perfil:
-                    reemplazarFragment(new PerfilFragment());
-                    break;
-            }
-            return true;
-        });
+            //Cada vez que se seleccione un item del menú se cambiará de fragment
+            bottomNavigationView.setOnItemSelectedListener(item -> {
+                switch (item.getItemId()) {
+                    case R.id.inicio:
+                        reemplazarFragment(new InicioFragment());
+                        break;
+                    case R.id.escanearQr:
+                        reemplazarFragment(new EscanerFragment());
+                        break;
+                    case R.id.listaMuebles:
+                        reemplazarFragment(new ListaFragment());
+                        break;
+                    case R.id.perfil:
+                        reemplazarFragment(new PerfilFragment());
+                        break;
+                }
+                return true;
+            });
+        }else{
+            // Si el usuario es nulo, se finaliza el intent
+            finish();
+        }
     }
 
+    /**
+     * Método que reemplaza el fragment que se está mostrando en la pantalla del menú
+     * @param fragment
+     */
     private void reemplazarFragment(Fragment fragment){
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
@@ -92,23 +101,46 @@ public class MenuActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
+    /**
+     * Método que muestra la toolbar personalizada
+     * @param menu
+     * @return boolean
+     */
     public boolean onCreateOptionsMenu(Menu menu){
         getMenuInflater().inflate(R.menu.toolbar_menu, menu);
         return true;
     }
 
+    /**
+     * Método que controla el evento que ocurre
+     * al pulsar un item de la toolbar
+     * @param item
+     * @return boolean
+     */
     public boolean onOptionsItemSelected(@NonNull MenuItem item){
         int id = item.getItemId();
-        switch (id){
-            case R.id.logout:
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(MenuActivity.this, LoginActivity.class));
-                finish();
-                break;
-        }
-
+           if(id == R.id.logout){
+               AlertDialog dialogo = new AlertDialog
+                       .Builder(MenuActivity.this).setPositiveButton("Sí, cerrar", new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialog, int which) {
+                       //Hace que el usuario sea null
+                       firebaseAuth.signOut();
+                       Intent intent = new Intent(MenuActivity.this, LoginActivity.class);
+                       startActivity(intent);
+                       finish();
+                   }
+               }).setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
+                   @Override
+                   public void onClick(DialogInterface dialog, int which) {
+                       dialog.dismiss();
+                       Toast.makeText(MenuActivity.this, "Logout cancelado.", Toast.LENGTH_LONG).show();
+                   }
+               }).setTitle("Confirmar") // El título
+                       .setMessage("¿Desea cerrar sesión?") // El mensaje
+                       .create();
+               dialogo.show();
+            }
         return true;
     }
-
-
 }

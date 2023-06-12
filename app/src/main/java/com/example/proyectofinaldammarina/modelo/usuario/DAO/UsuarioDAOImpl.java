@@ -18,30 +18,35 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 /**
- * comentario
+ * Esta clase implementa la interfaz específica
+ * IUsuarioDAO para poder desarrollar sus métodos abstractos.
  */
 public class UsuarioDAOImpl implements IUsuarioDAO {
 
-    // Atributos
+    // Se declaran los atributos
     FirebaseFirestore database;
     String nombreColeccion;
 
     public UsuarioDAOImpl(FirebaseFirestore db, String nombreColeccion) {
+        //instancia de la base de datos
         this.database = db;
+        //nombre de la colección a la que se quiere acceder
         this.nombreColeccion = nombreColeccion;
-
     }
 
     /**
-     * Método save usuario en la base de datos (Firestore)
+     * Método que inserta un usuario en la base de datos (Firestore)
+     * Por parámetro recibe el usuario (Objecto) a insertar y el id
+     * (Clave primaria de ese documento en la colección usuario).
+     * El id será el uid (Único) que la propiedad authentification asigna a cada usuario.
      * @param usuario
-     * @return
+     * @param idNuevoUsuario
+     * @return Usuario
      */
     @Override
     public Usuario insertarUsuario(Usuario usuario, String idNuevoUsuario) {
         database.collection(nombreColeccion).document(idNuevoUsuario)
-                .set(new Usuario(usuario.getNombre(),usuario.getEmail(), "cliente", ""));
-
+                .set(usuario);
         return null;
     }
 

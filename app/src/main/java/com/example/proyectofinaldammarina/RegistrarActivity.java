@@ -24,7 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Arrays;
 
 /**
- * AÑADIR EXPLICACION + COMENTARIOS
+ * Clase que controla los eventos de la pantalla del registro (XML) de un usuario.
  */
 public class RegistrarActivity extends AppCompatActivity {
 
@@ -39,6 +39,7 @@ public class RegistrarActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrar);
+        // Se inicializan variables
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -58,29 +59,33 @@ public class RegistrarActivity extends AppCompatActivity {
                 String email = campoEmail.getText().toString().trim();
                 String password = campoPassword.getText().toString().trim();
 
+                // Se comprueba que no se manden cadenas vacías
                 boolean nombreCorrecto = comprobarNombre(nombre, campoNombre);
                 boolean emailCorrecto = comprobarEmail(email, campoEmail);
                 boolean passwordCorrecta = comprobarPassword(password, campoPassword);
 
+                // Para que se pueda crear un nuevo usuario todos los campos deben ser correctos (Que no sean cadenas vacías)
                 if(nombreCorrecto && emailCorrecto && passwordCorrecta){
 
                     firebaseAuth.createUserWithEmailAndPassword(email, password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                         @Override
                         public void onSuccess(AuthResult authResult) {
-                            //Enviar rol + usuario, decidir que se muestra y que no
-                            //uid usuario
                             try {
+                                // Si el nuevo usuario se crea con éxito, se creará un usuario en la base de datos de Firestore
                                 UsuarioDAOImpl usuarioDAO = new UsuarioDAOImpl(firebaseFirestore, "usuarios");
+                                // Por defecto todos los usuarios tendrá el rol "cliente" y ninguna imagen asociada
                                 usuarioDAO.insertarUsuario(new Usuario(nombre, email,"cliente", ""), FirebaseAuth.getInstance().getUid());
 
+                                // También se crea un historial que está asoaciado a ese usuario
                                 HistorialDAOImpl historialDAO = new HistorialDAOImpl(firebaseFirestore, "historial");
                                 historialDAO.crearHistorial(firebaseAuth.getUid());
 
                                 Toast.makeText(RegistrarActivity.this, "¡Cuenta creada con éxito!", Toast.LENGTH_LONG).show();
+                                // Si la cuenta se crea con éxito se volverá a la pantalla de login
                                 startActivity(new Intent(RegistrarActivity.this, LoginActivity.class));
 
                             }catch (Exception e){
-                                //Mensaje de errorr
+                                // Mensaje de error si la creación falla.
                                 Toast.makeText(RegistrarActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
                             }
                         }
@@ -97,6 +102,13 @@ public class RegistrarActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Método para comprobar si el nombre es una cadena vacía, si lo es
+     * se mostrará un error en el campo del nombre.
+     * @param nombre
+     * @param campoNombre
+     * @return boolean
+     */
     private boolean comprobarNombre(String nombre, EditText campoNombre){
         boolean esCorrecto;
         if(nombre.isEmpty()){
@@ -105,12 +117,11 @@ public class RegistrarActivity extends AppCompatActivity {
         }else{
             esCorrecto = true;
         }
-
         return esCorrecto;
     }
 
     /**
-     * Método para comprobar el email es una cadena vacía, si lo es
+     * Método para comprobar si el email es una cadena vacía, si lo es
      * se mostrará un error en el campo del email.
      * @param email
      * @param campoEmail
@@ -124,7 +135,6 @@ public class RegistrarActivity extends AppCompatActivity {
         }else{
             esCorrecto = true;
         }
-
         return esCorrecto;
     }
 

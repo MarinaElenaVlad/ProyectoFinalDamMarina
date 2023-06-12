@@ -1,24 +1,15 @@
 package com.example.proyectofinaldammarina.modelo.usuario;
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
- * Explicacion clase!!
+ * Modelo de clase reflejo de la colección Usuario de FireStore Database
  */
 public class Usuario {
 
     // Se declaran los atributos
-    /**
-     * poner id??
-     */
     private String nombre;
     private String email;
     private String idRol;
     private String imagenUsuario;
-    /**
-     * HISTORIAL!!!!!
-     */
 
     /**
      * Constructor sin parámetros
@@ -27,12 +18,11 @@ public class Usuario {
     }
 
     /**
-     * Constructor con parámetros
+     * Constructor con todos los parámetros
      */
     public Usuario(String nombre, String email, String idRol, String imagenUsuario) {
         this.nombre = nombre;
         this.email = email;
-//        this.password = password;
         this.idRol = idRol;
         this.imagenUsuario = imagenUsuario;
     }
@@ -55,7 +45,6 @@ public class Usuario {
     public void setEmail(String email) {
         this.email = email;
     }
-
 
     public String getIdRol() {
         return idRol;
