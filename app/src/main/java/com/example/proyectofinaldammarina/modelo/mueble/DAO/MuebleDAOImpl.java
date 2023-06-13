@@ -23,29 +23,39 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedMap;
-
+/**
+ * Esta clase implementa la interfaz específica
+ * IMuebleDAO para poder desarrollar sus métodos abstractos.
+ */
 public class MuebleDAOImpl implements IMuebleDAO {
 
-    // Atributos
+    // Se declaran los atributos
     FirebaseFirestore database;
     String nombreColeccion;
 
     public MuebleDAOImpl(FirebaseFirestore database, String nombreColeccion) {
+        //instancia de la base de datos
         this.database = database;
+        //nombre de la colección a la que se quiere acceder
         this.nombreColeccion = nombreColeccion;
     }
 
+    /**
+     * Método que actualiza 4 atributos de un objeto de la clase Mueble.
+     * @param mueble
+     * @param context
+     */
     @Override
     public void actualizarMueble(Mueble mueble, Context context) {
         DocumentReference muebleReferencia = database.collection(nombreColeccion).document(mueble.getCodigoQr());
 
+        // Actualizamos los campos nombre, precio, medidas y descripcion
         muebleReferencia.update("nombre", mueble.getNombre(), "precio", mueble.getPrecio(),
                 "medidas", mueble.getMedidas(), "descripcion", mueble.getDescripcion()).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()){
                     Toast.makeText(context, "Campo/s actualizados.", Toast.LENGTH_SHORT).show();
-                    //Volver a la pantalla principal o algo!
                 }else{
                     Toast.makeText(context, "Error al actualizar", Toast.LENGTH_SHORT).show();
                 }
@@ -73,29 +83,5 @@ public class MuebleDAOImpl implements IMuebleDAO {
                     }
                 });
     }
-
-//    @Override
-//    public List<Mueble> rellenarListaMuebles(Adaptador adaptador) {
-//        List<Mueble> muebleList = new ArrayList<>();
-//            database.collection(nombreColeccion).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//                @Override
-//                public void onComplete(Task<QuerySnapshot> task) {
-//                    System.out.println("ACAAAAAAAAAAA");
-//                    muebleList.clear();
-//                    for (QueryDocumentSnapshot document : task.getResult()) {
-//                        Mueble mueble = document.toObject(Mueble.class);
-//                        muebleList.add(mueble);
-//                    }
-//                    adaptador.notifyDataSetChanged();
-//                }
-//            }).addOnFailureListener(new OnFailureListener() {
-//                @Override
-//                public void onFailure(Exception e) {
-//                    e.printStackTrace();
-//                }
-//            });
-//
-//        return muebleList;
-//        }
 
 }

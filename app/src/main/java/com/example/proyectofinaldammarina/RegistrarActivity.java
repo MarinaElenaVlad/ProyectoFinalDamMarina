@@ -93,8 +93,7 @@ public class RegistrarActivity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(RegistrarActivity.this, e.getMessage(), Toast.LENGTH_LONG).show();
-                            //poner pausa, que no salgan mensjaes encima de otros si se pulsa el boton varias veces
+                            Toast.makeText(RegistrarActivity.this, "Registro fallido: " + e.getMessage(), Toast.LENGTH_LONG).show();
                         }
                     });
                 }

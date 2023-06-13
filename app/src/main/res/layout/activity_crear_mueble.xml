@@ -16,7 +16,7 @@
             <androidx.appcompat.widget.Toolbar
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/toolbarDetalleMueble"
+                android:id="@+id/toolbarCrearMueble"
                 android:background="@color/blue"
                 app:logo="@drawable/ic_baseline_historial"
                 app:title="Crear mueble"

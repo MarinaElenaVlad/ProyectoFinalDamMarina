@@ -3,7 +3,7 @@ package com.example.proyectofinaldammarina;
 import com.journeyapps.barcodescanner.CaptureActivity;
 
 /**
- * QUE NO SE HAYA CREADO COMO KOTLIN!! LA CLASE
+ * Clase que utilizamos en las propiedades del escaner
  */
 public class CaptureActivityPortraint extends CaptureActivity {
 }

@@ -3,21 +3,32 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:gravity="center"
-    android:padding="16dp"
     tools:context=".HistorialActivity">
 
-    <TextView
-        android:id="@+id/textoHistorial"
-        android:layout_width="wrap_content"
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="HISTORIAL MUEBLES ESCANEADOS"
-        android:textAlignment="center"
-        android:textColor="@android:color/holo_blue_dark"
-        android:textSize="32sp"
-        android:layout_marginBottom="5dp"/>
+        android:id="@+id/toolbarHistorialMueble"
+        android:background="@color/blue"
+        app:logo="@drawable/ic_baseline_chair_24"
+        app:title="Historial muebles escaneados"
+        app:titleMarginStart="30dp"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+        app:popupTheme="@style/Theme.AppCompat.Light"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+<!--    <TextView-->
+<!--        android:id="@+id/textoHistorial"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="HISTORIAL MUEBLES ESCANEADOS"-->
+<!--        android:textAlignment="center"-->
+<!--        android:textColor="@android:color/holo_blue_dark"-->
+<!--        android:textSize="32sp"-->
+<!--        android:layout_marginBottom="5dp"/>-->
 
     <ListView
         android:id="@+id/listaHistorial"

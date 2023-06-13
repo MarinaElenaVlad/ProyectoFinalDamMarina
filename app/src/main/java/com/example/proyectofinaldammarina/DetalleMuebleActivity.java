@@ -95,7 +95,7 @@ public class DetalleMuebleActivity extends AppCompatActivity {
 
         if(bundle.getString("zonaId").equals("Sin zona")){
             zonaMueble.setText("");
-            // Se usa un diálogo de confirmación
+            // Se usa un diálogo que informa al usuario
             AlertDialog dialogoOk = new AlertDialog.Builder(DetalleMuebleActivity.this).create();
             dialogoOk.setTitle("Aviso sobre la zona");
             dialogoOk.setIcon(R.drawable.ic_baseline_info_24);

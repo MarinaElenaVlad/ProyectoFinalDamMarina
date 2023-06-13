@@ -7,9 +7,13 @@ import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
 
 import java.util.List;
 
+/**
+ * Interfaz específica para la clase Mueble.
+ * Recordemos que las interfaces no tienen constructor
+ * y que todos sus métodos son abstractos (No tienen
+ * definición, sólo declaramos su estructura en la interfaz).
+ */
 public interface IMuebleDAO {
-
-//    public List<Mueble> rellenarListaMuebles(Adaptador adaptador);
 
     public void actualizarMueble(Mueble mueble, Context context);
 

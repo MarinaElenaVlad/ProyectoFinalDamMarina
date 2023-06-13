@@ -37,8 +37,13 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Fragment que se agrega dentro del activity del menú cuando se pulsa
+ * la opción 'Escanear QR' del navegador inferior que está en la barra inferior
+ */
 public class EscanerFragment extends Fragment {
 
+    // Se declaran las variables
     private CardView cardViewEscanear, cardViewHistorial;
 
     private String valorEscaneo = "";
@@ -49,7 +54,9 @@ public class EscanerFragment extends Fragment {
 
     private Historial historial;
 
-
+    /**
+     * Constructor vacío
+     */
     public EscanerFragment() {
     }
 
@@ -59,12 +66,16 @@ public class EscanerFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_escaner, container, false);
 
+        // Se inicializan variables
         db = FirebaseFirestore.getInstance();
 
         firebaseAuth = FirebaseAuth.getInstance();
 
         cardViewEscanear = root.findViewById(R.id.cardEscaner);
 
+        /**
+         * Se controla el evento que se produce cuando se pulsa el card view Escanear
+         */
         cardViewEscanear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -74,25 +85,28 @@ public class EscanerFragment extends Fragment {
 
         cardViewHistorial = root.findViewById(R.id.cardHistorial);
 
+        /**
+         * Se controla el evento que se produce cuando se pulsa el card view Historial
+         */
         cardViewHistorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /**
-                 * borrar referencia anterior y sustituir por la nueva? hacer esta comprobacion?
-                 */
+                // Se abre el historial
                 startActivity(new Intent(getActivity(), HistorialActivity.class));
             }
         });
 
-
         return root;
     }
 
-//    video : https://youtu.be/5WzKeY6uVX4
+    /**
+     * Método que abre el escaner de códigos qr
+     */
     public void escanear(){
         ScanOptions scanOptions = new ScanOptions();
+        // Propiedades escaner
         scanOptions.setDesiredBarcodeFormats(ScanOptions.QR_CODE);
-        scanOptions.setPrompt("Escanea un código QR"); //titulo que aparece en el lector
+        scanOptions.setPrompt("Escanea un código QR"); //título que aparece en el lector
         scanOptions.setCameraId(0); //camara trasera
         scanOptions.setBeepEnabled(false);//sonido al escanear
         scanOptions.setOrientationLocked(false);
@@ -102,11 +116,16 @@ public class EscanerFragment extends Fragment {
         launcherEscaner.launch(scanOptions);
     }
 
+    /**
+     * Este método recoge el resultado que estaba asociado al código escaneado y a partir de
+     * él se toman decisiones en el código
+     */
     private final ActivityResultLauncher<ScanOptions> launcherEscaner = registerForActivityResult(new ScanContract(), result -> {
         if(result.getContents() == null){
             Toast.makeText(getActivity(), "Escaneo cancelado", Toast.LENGTH_LONG).show();
         }else{
             valorEscaneo = result.getContents();
+            // Se recorre la lista de muebles
             DocumentReference docRef = db.collection("muebles").document(valorEscaneo);
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
@@ -117,10 +136,7 @@ public class EscanerFragment extends Fragment {
                         if (document.exists()) {
                             Toast.makeText(getActivity(), "Búsqueda exitosa!", Toast.LENGTH_LONG).show();
 
-                            /**
-                             * AÑADIR AL HISTORIAL!!
-                             */
-
+                            // Se busca el historial del usuario
                             db.collection("historial").whereEqualTo("usuario", firebaseAuth.getUid()).get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                                 @Override
@@ -129,6 +145,7 @@ public class EscanerFragment extends Fragment {
                                         for (QueryDocumentSnapshot document : task.getResult()) {
                                             historial = document.toObject(Historial.class);
                                         }
+                                        // Se añade el mueble al historial
                                         actualizarHistorial(historial, valorEscaneo);
                                     }else{
                                         Toast.makeText(getActivity(), "Error getting documents:", Toast.LENGTH_LONG).show();
@@ -143,13 +160,9 @@ public class EscanerFragment extends Fragment {
 
 
                         } else {//El documento no existe!
-                            //si el usuario es un cliente se le muestra un mensaje de error
+                            //si el usuario es un cliente se le mostrará un mensaje de error
                             noEncontrado(firebaseAuth.getUid());
-                            //si el usuario es un empleado se le muestra un mensaje de si o no
-
-//                                Intent intent = new Intent(MainActivity.this, NoEncontrar.class);
-//                                intent.putExtra("id", resultadoEscaneo);
-//                                startActivity(intent);
+                            //si el usuario es un empleado se le mostrará un mensaje de si o no
                         }
                     } else {
                         Toast.makeText(getActivity(), "get failed with " + task.getException(), Toast.LENGTH_LONG).show();
@@ -159,8 +172,11 @@ public class EscanerFragment extends Fragment {
         }
     });
 
+    /**
+     * Método que se ejecutará si el código escaneado no pertenece a ningún mueble de la base de datos
+     * @param idUsuario
+     */
     private void noEncontrado(String idUsuario){
-
 
         db.collection("usuarios").document(idUsuario).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -169,10 +185,12 @@ public class EscanerFragment extends Fragment {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 Usuario usuario = document.toObject(Usuario.class);
+                                // Determinamos cómo actuará el programa según el rol del usuario
                                 if (usuario.getIdRol().equals("empleado")) {
                                     AlertDialog.Builder builder;
                                     AlertDialog alerta;
 
+                                    // Dialogo personalizado (layout 'dialogo_pregunta')
                                     View layoutView = getLayoutInflater().inflate(R.layout.dialogo_pregunta, null);
                                     AppCompatButton botonOkDialogo = layoutView.findViewById(R.id.botonSiDuda);
                                     AppCompatButton botonCancelarDialogo = layoutView.findViewById(R.id.botonNoDuda);
@@ -180,33 +198,32 @@ public class EscanerFragment extends Fragment {
                                     builder = new AlertDialog.Builder(getActivity());
                                     builder.setView(layoutView);
                                     alerta = builder.create();
-                                    /**
-                                     * controlar que no pueda cerrar el dialogo
-                                     */
+
+                                    // Se controla de que no se pueda cerrar el diálogo a menos
+                                    // que se pulse el botón cancelar
                                     alerta.setCanceledOnTouchOutside(false);
                                     alerta.setCancelable(false); //flecha hacía atrás
 
-                                    /**
-                                     * usar mismos dialogos en otros errores
-                                     */
                                     alerta.show();
 
+                                    // Se controla el evento que sucede al pulsar el botón ok
+                                    // del diálogo
                                     botonOkDialogo.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            /**
-                                             * No puedes añadir "" como id, numeros -1? aunque sea string?
-                                             */
+                                            // Se va al intent donde se podrá crear un nuevo mueble
                                             Intent intent = new Intent(getActivity(), CrearMuebleActivity.class);
                                             intent.putExtra("id", valorEscaneo);
                                             startActivity(intent);
-                                            alerta.dismiss();//se quita el dialogo si decide volver atras
+                                            alerta.dismiss();//se quita el dialogo
                                         }
                                     });
-
+                                    // Se controla el evento que sucede al pulsar el botón cancelar
+                                    // del diálogo
                                     botonCancelarDialogo.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
+                                            //se quita el dialogo
                                             alerta.dismiss();
                                         }
                                     });
@@ -215,6 +232,7 @@ public class EscanerFragment extends Fragment {
                                     AlertDialog.Builder builder;
                                     AlertDialog alerta;
 
+                                    // Dialogo personalizado (layout 'dialogo_error')
                                     View layoutView = getLayoutInflater().inflate(R.layout.dialogo_error, null);
                                     AppCompatButton botonDialogo = layoutView.findViewById(R.id.botonOkError);
 
@@ -223,6 +241,8 @@ public class EscanerFragment extends Fragment {
                                     alerta = builder.create();
                                     alerta.show();
 
+                                    // Se controla el evento que sucede cuando se pulsa el botón ok
+                                    // del diálogo
                                     botonDialogo.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
@@ -236,15 +256,20 @@ public class EscanerFragment extends Fragment {
                 });
     }
 
+    /**
+     * Método que añade el mueble escaneado al historial correspondiente a ese usuario
+     * @param his
+     * @param muebleConsultado
+     */
     private void actualizarHistorial(Historial his, String muebleConsultado){
 
+        // Comprobamos si el mueble ya existe en el historial (Ya hay una o varias referencias a él)
         if(his.getMuebleList().contains(muebleConsultado)) {
-            //Antes de insertar la nueva referencia borramos la referencia exitente del historial (Para que no se repitan referencias)
+            // Antes de insertar la nueva referencia borramos la referencia existente del historial (Para que no se repitan referencias)
             his.getMuebleList().removeAll(Collections.singleton(muebleConsultado));
         }
         // Se añade el id del mueble buscado a la lista
         his.getMuebleList().add(muebleConsultado);
-        System.out.println(his.getMuebleList());
         db.collection("historial").document(his.getIdentificador())
                 .update("muebleList", his.getMuebleList()).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
