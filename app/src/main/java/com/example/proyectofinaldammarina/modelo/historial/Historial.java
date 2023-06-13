@@ -3,7 +3,7 @@ package com.example.proyectofinaldammarina.modelo.historial;
 import java.util.List;
 
 /**
- * Modelo de clase reflejo de la colección Historial de FireStore Database
+ * Modelo de clase reflejo de la colección historial de FireStore Database
  */
 public class Historial {
 

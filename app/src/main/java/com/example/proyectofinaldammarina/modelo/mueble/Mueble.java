@@ -3,20 +3,18 @@ package com.example.proyectofinaldammarina.modelo.mueble;
 import java.io.Serializable;
 
 /**
- * Explicacion clase!!
+ * Modelo de clase reflejo de la colección muebles de FireStore Database
  */
 public class Mueble implements Serializable {
 
+    // Se declaran los atributos
     private String codigoQr;
     private String imagen;
     private String nombre;
     private Double precio;
     private String medidas;
     private String descripcion;
-    //Relaciones
-    /**
-     * Mirar!!
-     */
+
     private String estanteriaId;
     private String zonaId;
 
@@ -27,7 +25,7 @@ public class Mueble implements Serializable {
     }
 
     /**
-     * Constructor con parámetros
+     * Constructor con algunos parámetros
      */
     public Mueble(String codigoQr, String imagen, String nombre, Double precio, String medidas, String descripcion) {
         this.codigoQr = codigoQr;
@@ -38,6 +36,9 @@ public class Mueble implements Serializable {
         this.descripcion = descripcion;
     }
 
+    /**
+     * Constructor con todos los parámetros
+     */
     public Mueble(String codigoQr, String imagen, String nombre, Double precio, String medidas, String descripcion, String estanteriaId, String zonaId) {
         this.codigoQr = codigoQr;
         this.imagen = imagen;

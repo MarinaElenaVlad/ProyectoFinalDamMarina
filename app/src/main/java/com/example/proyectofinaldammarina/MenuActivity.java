@@ -50,7 +50,7 @@ public class MenuActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_menu);
-
+        // Se inicializan variables
         firebaseAuth = FirebaseAuth.getInstance();
 
         // Se asocian las variables con los elementos xml del layout asociado a este activity

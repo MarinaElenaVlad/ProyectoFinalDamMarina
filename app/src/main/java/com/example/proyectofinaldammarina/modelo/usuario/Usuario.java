@@ -1,7 +1,7 @@
 package com.example.proyectofinaldammarina.modelo.usuario;
 
 /**
- * Modelo de clase reflejo de la colección Usuario de FireStore Database
+ * Modelo de clase reflejo de la colección usuarios de FireStore Database
  */
 public class Usuario {
 

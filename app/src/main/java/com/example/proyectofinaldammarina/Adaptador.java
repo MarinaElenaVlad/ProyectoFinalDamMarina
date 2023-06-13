@@ -23,22 +23,38 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+/**
+ * Clase que extiende de RecyclerView.Adapter y que ayuda a personalizar
+ * la forma en la que se muestran los items del recycler view del
+ * fragment lista
+ */
 public class Adaptador extends RecyclerView.Adapter<Adaptador.Vista>{
 
+    // Se declaran los atributos
     private List<Mueble> muebleList;
     private CardView filaMueble;
     private Context context;
 
+    /**
+     * Constructor con parámetros
+     * @param muebleList
+     * @param context
+     */
     public Adaptador(List<Mueble> muebleList, Context context) {
         this.muebleList = muebleList;
         this.context = context;
     }
 
+    /**
+     * Método que actualiza la lista según lo que se escriba en la barra de búsqueda
+     * @param listaFiltrada
+     */
     public void setSearchView(List<Mueble> listaFiltrada){
         this.muebleList = listaFiltrada;
         notifyDataSetChanged();
     }
 
+    // Se vincula el recycler y los elementos del layout mueble
     @NonNull
     @Override
     public Vista onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -50,26 +66,22 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.Vista>{
         return new Vista(v);
     }
 
+    // Vinculamos vista (layout mueble) con el contenedor de la vista (layout lista fragment)
     @Override
     public void onBindViewHolder(@NonNull Vista holder, @SuppressLint("RecyclerView") int position) {
-
+        // Se seleccionan los elementos del layout y se les asigna los datos que hay en el array
         Picasso.get().load(muebleList.get(position).getImagen()).into(holder.imagenMueble);
         holder.nombreMueble.setText(muebleList.get(position).getNombre());
-//        holder.precioMueble.setText(muebleList.get(position).getPrecio() + "€");
-        holder.precioMueble.setText(muebleList.get(position).getPrecio() + "");
+        holder.precioMueble.setText(muebleList.get(position).getPrecio() + "€");
+
         /**
-         * poner signo euro en la pantalla, no en la variable!
+         * Se controla el evento que ocurre cuando se pulsa un item de la lista
          */
-
-
-        filaMueble.setOnClickListener(new View.OnClickListener() { //NUEVO
+        filaMueble.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                /**
-                 * Pruebas, dio una vez error al buscar y dar click, pero luego no!
-                 */
+                // Se crea un nuevo intent y se les pasa los siguientes valores
                 Intent intent = new Intent(context, DetalleMuebleActivity.class);
-                System.out.println(muebleList.get(position).toString());
                 intent.putExtra("codigo", muebleList.get(position).getCodigoQr());
                 intent.putExtra("nombre", muebleList.get(position).getNombre());
                 intent.putExtra("precio", muebleList.get(position).getPrecio());
@@ -78,6 +90,7 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.Vista>{
                 intent.putExtra("descripcion", muebleList.get(position).getDescripcion());
                 intent.putExtra("zonaId", muebleList.get(position).getZonaId());
 
+                // Cambiamos de intent
                 context.startActivity(intent);
             }
         });
@@ -89,16 +102,21 @@ public class Adaptador extends RecyclerView.Adapter<Adaptador.Vista>{
     }
 
     public class Vista extends RecyclerView.ViewHolder {
+
+        // Se crea la clase vista como subclase de la clase adaptador y extiende de RecyclerView.ViewHolder
+
+        //Declaramos variables del tipo que queremos mostrar
         TextView nombreMueble, precioMueble;
 
         ImageView imagenMueble;
 
         public Vista(@NonNull View itemView) {
             super(itemView);
+
+            //Vinculamos variables con elementos del layout
             nombreMueble = itemView.findViewById(R.id.muebleNombreItem);
             precioMueble = itemView.findViewById(R.id.mueblePrecioItem);
             imagenMueble = itemView.findViewById(R.id.imagenMuebleItem);
-
 
             filaMueble = itemView.findViewById(R.id.filaMueble);
 

@@ -12,15 +12,13 @@
     android:orientation="vertical"
     tools:context=".DetalleMuebleActivity">
 
-
-<!--    cambiar icono toolbar-->
        <androidx.appcompat.widget.Toolbar
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/toolbarDetalleMueble"
             android:background="@color/blue"
-            app:logo="@drawable/ic_baseline_historial"
-            app:title="Detalle mueble"
+            app:logo="@drawable/ic_baseline_chair_24"
+            app:title="Detalle del mueble"
             app:titleMarginStart="30dp"
             android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/Theme.AppCompat.Light"
@@ -123,7 +121,7 @@
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="0dp"
-                android:layout_weight="0.6333"
+                android:layout_weight="0.3333"
                 android:layout_height="match_parent">
 
 
@@ -227,27 +225,27 @@
         android:layout_marginTop="20dp"
         android:gravity="center">
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/modificarMueble"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:background="@drawable/custom_edittext"
-            android:backgroundTint="@color/blueAqua"
-            android:contentDescription="Modificar"
-            android:text="Editar"
-            android:textStyle="bold"
-            android:layout_margin="6dp"/>
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/eliminarMueble"
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/modificarMueble"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:src="@drawable/ic_baseline_delete_24"
-                android:contentDescription="Eliminar"
-                android:layout_margin="16dp" />
+                android:background="@drawable/custom_edittext"
+                android:backgroundTint="@color/blueAqua"
+                android:contentDescription="Modificar"
+                android:text="Editar"
+                android:textStyle="bold"
+                android:layout_margin="6dp"/>
+
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/eliminarMueble"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end|bottom"
+                    android:src="@drawable/ic_baseline_delete_24"
+                    android:contentDescription="Eliminar"
+                    android:layout_margin="16dp" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
 </LinearLayout>
 </ScrollView>

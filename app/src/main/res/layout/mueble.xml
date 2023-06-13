@@ -33,7 +33,7 @@
                         <TextView
                             android:id="@+id/muebleNombreItem"
                             android:textColor="@color/black"
-                            android:text="dhgf"
+                            android:text="nombre"
                             android:textSize="19sp"
                             android:textStyle="bold|normal"
                             android:layout_margin="10dp"
@@ -44,7 +44,7 @@
                         <TextView
                             android:id="@+id/mueblePrecioItem"
                             android:textColor="@android:color/darker_gray"
-                            android:text="dhgf"
+                            android:text="precio"
                             android:textSize="19sp"
                             android:textStyle="bold|normal"
                             android:layout_margin="10dp"

@@ -9,10 +9,12 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:text="Actualizar datos del mueble"
-            android:background="@color/pink"
+            android:background="@drawable/custom_edittext"
+            android:backgroundTint="@color/pink"
             android:textSize="25dp"
             android:gravity="center"
-            android:textColor="@color/black" />
+            android:textColor="@color/black"
+            />
 
         <TextView
             android:layout_width="match_parent"

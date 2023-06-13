@@ -11,7 +11,7 @@ public interface IMuebleDAO {
 
 //    public List<Mueble> rellenarListaMuebles(Adaptador adaptador);
 
-    public void actualizarMueble(String id, Mueble mueble, Context context);
+    public void actualizarMueble(Mueble mueble, Context context);
 
     public void insertarMueble(Mueble mueble, Context context);
 }

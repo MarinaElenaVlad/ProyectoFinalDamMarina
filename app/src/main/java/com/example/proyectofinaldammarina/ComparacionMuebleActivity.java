@@ -132,7 +132,7 @@ public class ComparacionMuebleActivity extends AppCompatActivity {
                                             nombreActualizar.getText().toString().trim(), Double.parseDouble(precioActualizar.getText().toString().trim()),
                                             medidasActualizar.getText().toString().trim(), descripcionActualizar.getText().toString().trim());
                                     MuebleDAOImpl muebleDAO = new MuebleDAOImpl(db, "muebles");
-                                    muebleDAO.actualizarMueble(mueb.getCodigoQr(), mueb, ComparacionMuebleActivity.this);
+                                    muebleDAO.actualizarMueble(mueb, ComparacionMuebleActivity.this);
                                     dialog.dismiss();
                                     startActivity(new Intent(ComparacionMuebleActivity.this, MenuActivity.class));
                                     /**

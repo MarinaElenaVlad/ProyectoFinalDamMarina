@@ -40,11 +40,15 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.squareup.picasso.Picasso;
 
+/**
+ * Clase que controla los eventos del layout (XML) que se muestran cada vez que se pulsa
+ * un item del recycler view del fragment de la lista.
+ */
 public class DetalleMuebleActivity extends AppCompatActivity {
 
-    // Se declaran variables
+    // Se declaran las variables
     private TextView nombreMueble, precioMueble, medidasMueble, descripcionMueble,  zonaMueble;
-    private ImageView imagenMueble, imagenZona;
+    private ImageView imagenMueble;
 
     private FirebaseAuth firebaseAuth;
     private FirebaseFirestore db;
@@ -54,22 +58,21 @@ public class DetalleMuebleActivity extends AppCompatActivity {
     private FloatingActionButton botonEliminar;
     private AppCompatButton botonModificar;
 
-    private EditText editMueble;
-
     private Bundle bundle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detalle_mueble);
+        // Se inicializan variables
         firebaseAuth = FirebaseAuth.getInstance();
         db = FirebaseFirestore.getInstance();
 
-
         toolbar = findViewById(R.id.toolbarDetalleMueble);
+        // Se carga la toolbar
         setSupportActionBar(toolbar);
 
-        // Se asocian las variables a un elemento xml del layout correspondiente
+        // Se asocian las variables a su elemento correspondiente del layout
         nombreMueble = findViewById(R.id.detalleNombreMueble);
         precioMueble = findViewById(R.id.detallePrecioMueble);
         medidasMueble = findViewById(R.id.detalleMedidasMueble);
@@ -77,14 +80,11 @@ public class DetalleMuebleActivity extends AppCompatActivity {
         zonaMueble = findViewById(R.id.detalleZonaMueble);
 
         imagenMueble = findViewById(R.id.detalleImagenMueble);
-        imagenZona = findViewById(R.id.detalleImagenZona);
 
         botonEliminar = findViewById(R.id.eliminarMueble);
         botonModificar = findViewById(R.id.modificarMueble);
 
-        //editMueble = findViewById(R.id.editMueble);
-
-        // Se reciben los datos del fragment lista
+        // Se reciben los datos del fragment lista y se muestran en el layout
         bundle = getIntent().getExtras();
 
         String codigoQr = bundle.getString("codigo");
@@ -93,15 +93,24 @@ public class DetalleMuebleActivity extends AppCompatActivity {
         medidasMueble.setText(bundle.getString("medidas"));
         descripcionMueble.setText(bundle.getString("descripcion"));
 
-        /**
-         * MODIFICAR TODOS LOS MUEBLES, UNICO POSIBLE VALOR = SIN ESTANTERIA O UNA
-         */
         if(bundle.getString("zonaId").equals("Sin zona")){
             zonaMueble.setText("");
-            /**
-             * dialogo "error" = no zona, no a la venta (PROXIMAMENTE)
-             */
+            // Se usa un diálogo de confirmación
+            AlertDialog dialogoOk = new AlertDialog.Builder(DetalleMuebleActivity.this).create();
+            dialogoOk.setTitle("Aviso sobre la zona");
+            dialogoOk.setIcon(R.drawable.ic_baseline_info_24);
+            dialogoOk.setMessage("¡El mueble aún no se encuentra expuesto en la tienda!");
+
+            dialogoOk.setButton(Dialog.BUTTON_NEUTRAL, "OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    dialogoOk.dismiss();
+                }
+            });
+
+            dialogoOk.show();
         }else{
+            // Se obtiene la zona de la base de datos
             db.collection("zonas").document(bundle.getString("zonaId")).get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
@@ -112,14 +121,12 @@ public class DetalleMuebleActivity extends AppCompatActivity {
                     });
         }
 
+        // Se carga la imagen de la base de datos
         Picasso.get().load(bundle.getString("imagen")).into(imagenMueble);
 
         /**
-         * zona + imagenes!!
+         * Se dan o se quita permisos según el rol que el usuario tenga
          */
-
-
-        //Borrar segun rol!!
         db.collection("usuarios").document(firebaseAuth.getUid()).get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                     @Override
@@ -128,28 +135,14 @@ public class DetalleMuebleActivity extends AppCompatActivity {
                             DocumentSnapshot document = task.getResult();
                             if (document.exists()) {
                                 Usuario usuario = document.toObject(Usuario.class);
-                                System.out.println(usuario.toString());
-                                System.out.println("ACTIVITY" + usuario.getIdRol());
+                                // Se quitan o se mantienen permisos sobre pulsar los botones
+                                // de eliminar y modificar
                                 if (usuario.getIdRol().equals("empleado")) {
-                                    Toast.makeText(DetalleMuebleActivity.this, "empleado", Toast.LENGTH_LONG).show();
                                     botonEliminar.setVisibility(View.VISIBLE);
                                     botonModificar.setVisibility(View.VISIBLE);
-                                    //editMueble.setFocusableInTouchMode(true);
-//                                    nombreMueble.setFocusableInTouchMode(true);
-//                                    precioMueble.setFocusableInTouchMode(true);
-//                                    medidasMueble.setFocusableInTouchMode(true);
-//                                    descripcionMueble.setFocusableInTouchMode(true);
-//                                    zonaMueble.setFocusableInTouchMode(true);
                                 } else {
-                                    Toast.makeText(DetalleMuebleActivity.this, "cliente", Toast.LENGTH_LONG).show();
                                     botonEliminar.setVisibility(View.GONE);
                                     botonModificar.setVisibility(View.GONE);
-//                                    nombreMueble.setFocusable(false);
-//                                    precioMueble.setFocusable(false);
-//                                    medidasMueble.setFocusable(false);
-//                                    descripcionMueble.setFocusable(false);
-//                                    zonaMueble.setFocusable(false);
-
                                 }
                             }
                         }
@@ -157,18 +150,18 @@ public class DetalleMuebleActivity extends AppCompatActivity {
                 });
 
         /**
-         * AÑADIR DIALOGO SI ESTA SEGURO + CONFIRMACION
+         * Se controlar el evento que sucede al pulsar el botón eliminar
          */
         botonEliminar.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
+                // Se usa un diálogo de sí o no
                 AlertDialog dialogo = new AlertDialog
                         .Builder(DetalleMuebleActivity.this)
                         .setPositiveButton("Sí, eliminar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // Hicieron click en el botón positivo, así que la acción está confirmada
+                            // Cuando se pulsa el botón positivo la acción se confirma (Se borra ese documento)
                             db.collection("muebles").document(codigoQr)
                             .delete()
                             .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -189,8 +182,8 @@ public class DetalleMuebleActivity extends AppCompatActivity {
                         .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                // Hicieron click en el botón negativo, no confirmaron
-                                // Simplemente se descarta el diálogo
+                                // La acción se cancela y
+                                // simplemente se descarta el diálogo
                                 dialog.dismiss();
                             }
                         })
@@ -202,97 +195,85 @@ public class DetalleMuebleActivity extends AppCompatActivity {
         });
 
 
+        /**
+         * Se controla el evento que sucede al pulsar el botón de modificar datos
+         */
         botonModificar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                 showDialog();
-//                AlertDialog dialogo = new AlertDialog
-//                        .Builder(DetalleMuebleActivity.this)
-//                        .setPositiveButton("Sí, modificar", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                MuebleDAOImpl muebleDAO = new MuebleDAOImpl(db, "muebles");
-//                                Mueble mueble = new Mueble(codigoQr, "",
-//                                        nombreMueble.getText().toString(), Double.parseDouble(precioMueble.getText().toString()),
-//                                        medidasMueble.getText().toString(), descripcionMueble.getText().toString());
-//                                muebleDAO.actualizarMueble(codigoQr, mueble, DetalleMuebleActivity.this);
-//                                startActivity(new Intent(DetalleMuebleActivity.this, MenuActivity.class));
-//                                /**
-//                                 * cuidado con precio, dolar!! + ver si update cambia o sustituye tood!!
-//                                 * +codigo qr obligatorio al añadir + todos campos, QUITAR IMAGEN CONSTRUCTOR
-//                                 * VER SI PONE NULL O MATIENE + quitar signo euro!!!!
-//                                 * controlar tipo de dato edittext
-//                                 */
-//                            }
-//
-//
-//                        })
-//                        .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                // Hicieron click en el botón negativo, no confirmaron
-//                                // Simplemente se descarta el diálogo
-//                                dialog.dismiss();
-//                            }
-//                        })
-//                        .setTitle("Confirmar") // El título
-//                        .setMessage("¿Desea modificar los datos de este mueble?") // El mensaje
-//                        .create();
-//                dialogo.show();
+                 // Se llama a la siguiente función
+                mostrarDialog();
             }
         });
     }
 
-    private void showDialog() {
+    /**
+     * Método que muestra un diálogo en el que se carga el contenido del layout
+     * 'actualizar_mueble'. Desde aquí el usuario podrá modificar algunos
+     * datos del mueble
+     */
+    private void mostrarDialog() {
         final Dialog dialog = new Dialog(DetalleMuebleActivity.this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // El contenido del diálogo será el layout 'actualizar_mueble'
         dialog.setContentView(R.layout.actualizar_mueble);
 
+        // Se declaran las variables propias del layout 'actualizar_mueble'
         TextView nombreActualizar, medidasActualizar, precioActualizar, descripcionActualizar;
         Button guardarCambios;
 
+        // Se asocian las variables a los elementos xml del layout 'actualizar_mueble'
         nombreActualizar = dialog.findViewById(R.id.nombreActualizarMueble);
         medidasActualizar = dialog.findViewById(R.id.medidasActualizarMueble);
         precioActualizar = dialog.findViewById(R.id.precioActualizarMueble);
         descripcionActualizar = dialog.findViewById(R.id.descripcionActualizarMueble);
         guardarCambios = dialog.findViewById(R.id.botonModificarMueble);
 
+        // Se cargan los datos del mueble en los campos
         nombreActualizar.setText(bundle.getString("nombre"));
         medidasActualizar.setText(bundle.getString("medidas"));
         precioActualizar.setText(bundle.getDouble("precio") + "");
         descripcionActualizar.setText(bundle.getString("descripcion"));
 
+        /**
+         * Se controla el evento que ocurre al pulsar el botón guardar cambios
+         * del layout 'actualizar_mueble'
+         */
         guardarCambios.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Se comprueban que los campos no estén vacíos
                 if(!estaVacio(nombreActualizar.getText().toString().trim(), medidasActualizar.getText().toString().trim(),
                         precioActualizar.getText().toString().trim(), descripcionActualizar.getText().toString().trim())){
+                    // Se muestra un diálogo de si o no
                     AlertDialog dialogo = new AlertDialog
                             .Builder(DetalleMuebleActivity.this)
                             .setPositiveButton("Sí, modificar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
+                                    // Se crea un objecto de tipo mueble con los datos que no han cambiado (codigo, imagen y zona)
+                                    // y se recogen los datos que sí que se pueden cambiar desde el layout 'actualizar_mueble'
                                     Mueble mueb = new Mueble(bundle.getString("codigo"), bundle.getString("imagen"),
                                             nombreActualizar.getText().toString().trim(), Double.parseDouble(precioActualizar.getText().toString().trim()),
                                             medidasActualizar.getText().toString().trim(), descripcionActualizar.getText().toString().trim());
-                                    MuebleDAOImpl muebleDAO = new MuebleDAOImpl(db, "muebles");
-                                    muebleDAO.actualizarMueble(mueb.getCodigoQr(), mueb, DetalleMuebleActivity.this);
+                                    try {
+                                        MuebleDAOImpl muebleDAO = new MuebleDAOImpl(db, "muebles");
+                                        //Actualizamos los campos modificados
+                                        muebleDAO.actualizarMueble(mueb, DetalleMuebleActivity.this);
+                                    }catch (Exception e){
+                                        Toast.makeText(DetalleMuebleActivity.this, "Error al actualizar los campos.", Toast.LENGTH_LONG).show();
+                                    }
+
                                     dialog.dismiss();
                                     startActivity(new Intent(DetalleMuebleActivity.this, MenuActivity.class));
-                                    /**
-                                     * cuidado con precio, dolar!! + ver si update cambia o sustituye tood!!
-                                     * +codigo qr obligatorio al añadir + todos campos, QUITAR IMAGEN CONSTRUCTOR
-                                     * VER SI PONE NULL O MATIENE + quitar signo euro!!!!
-                                     * controlar tipo de dato edittext
-                                     */
                                 }
 
                             })
                             .setNegativeButton("Cancelar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // Hicieron click en el botón negativo, no confirmaron
-                                    // Simplemente se descarta el diálogo
+                                    // La acción se cancela y
+                                    // simplemente se descarta el diálogo
                                     dialog.dismiss();
                                 }
                             })
@@ -311,10 +292,20 @@ public class DetalleMuebleActivity extends AppCompatActivity {
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        // Configuramos la animación del diálogo cuando se muestra y cuando desaparece de la pantalla
         dialog.getWindow().getAttributes().windowAnimations = R.style.animacionDialogo;
         dialog.getWindow().setGravity(Gravity.BOTTOM);
     }
 
+    /**
+     * Método que comprueba si los campos modificados están vacíos, si alguno
+     * de ellos lo está devolverá true.
+     * @param nombre
+     * @param medidas
+     * @param precio
+     * @param descripcion
+     * @return boolean
+     */
     private boolean estaVacio(String nombre, String medidas, String precio, String descripcion){
         if(nombre.isEmpty() || medidas.isEmpty() || precio.isEmpty() || descripcion.isEmpty()){
             return true;
@@ -323,6 +314,11 @@ public class DetalleMuebleActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Método que muestra la toolbar personalizada
+     * @param menu
+     * @return boolean
+     */
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.toolbar_detalle_mueble, menu);
         return true;

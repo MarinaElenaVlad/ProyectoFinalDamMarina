@@ -36,8 +36,8 @@ public class MuebleDAOImpl implements IMuebleDAO {
     }
 
     @Override
-    public void actualizarMueble(String id, Mueble mueble, Context context) {
-        DocumentReference muebleReferencia = database.collection(nombreColeccion).document(id);
+    public void actualizarMueble(Mueble mueble, Context context) {
+        DocumentReference muebleReferencia = database.collection(nombreColeccion).document(mueble.getCodigoQr());
 
         muebleReferencia.update("nombre", mueble.getNombre(), "precio", mueble.getPrecio(),
                 "medidas", mueble.getMedidas(), "descripcion", mueble.getDescripcion()).addOnCompleteListener(new OnCompleteListener<Void>() {
