@@ -1,5 +1,7 @@
 package com.example.proyectofinaldammarina.modelo.historial;
 
+import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
+
 import java.util.List;
 
 /**
@@ -9,7 +11,7 @@ public class Historial {
 
     // Se declaran los atributos
     String identificador;
-    List<String> muebleList;
+    List<Mueble> muebleList;
     String usuario;
 
     /**
@@ -21,7 +23,7 @@ public class Historial {
     /**
      * Constructor con parámetros
      */
-    public Historial(List<String> muebleList, String usuario) {
+    public Historial(List<Mueble> muebleList, String usuario) {
         this.muebleList = muebleList;
         this.usuario = usuario;
     }
@@ -37,11 +39,11 @@ public class Historial {
         this.identificador = identificador;
     }
 
-    public List<String> getMuebleList() {
+    public List<Mueble> getMuebleList() {
         return muebleList;
     }
 
-    public void setMuebleList(List<String> muebleList) {
+    public void setMuebleList(List<Mueble> muebleList) {
         this.muebleList = muebleList;
     }
 
@@ -53,7 +55,7 @@ public class Historial {
         this.usuario = usuario;
     }
 
-    public Historial(String identificador, List<String> muebleList, String usuario) {
+    public Historial(String identificador, List<Mueble> muebleList, String usuario) {
         this.identificador = identificador;
         this.muebleList = muebleList;
         this.usuario = usuario;

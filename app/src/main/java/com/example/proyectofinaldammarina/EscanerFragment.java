@@ -36,6 +36,7 @@ import com.journeyapps.barcodescanner.ScanOptions;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Iterator;
 
 /**
  * Fragment que se agrega dentro del activity del menú cuando se pulsa
@@ -134,6 +135,7 @@ public class EscanerFragment extends Fragment {
                         DocumentSnapshot document = task.getResult();
                         //Si ese documento con ese id existe
                         if (document.exists()) {
+                            Mueble mueble = document.toObject(Mueble.class);
                             Toast.makeText(getActivity(), "Búsqueda exitosa!", Toast.LENGTH_LONG).show();
 
                             // Se busca el historial del usuario
@@ -146,14 +148,12 @@ public class EscanerFragment extends Fragment {
                                             historial = document.toObject(Historial.class);
                                         }
                                         // Se añade el mueble al historial
-                                        actualizarHistorial(historial, valorEscaneo);
+                                        actualizarHistorial(historial, mueble);
                                     }else{
                                         Toast.makeText(getActivity(), "Error getting documents:", Toast.LENGTH_LONG).show();
                                     }
                                 }
                             });
-
-                            Mueble mueble = document.toObject(Mueble.class);
                             Intent intent = new Intent(getActivity(), ComparacionMuebleActivity.class);
                             intent.putExtra("mueble", mueble);
                             startActivity(intent);
@@ -261,26 +261,32 @@ public class EscanerFragment extends Fragment {
      * @param his
      * @param muebleConsultado
      */
-    private void actualizarHistorial(Historial his, String muebleConsultado){
+    private void actualizarHistorial(Historial his, Mueble muebleConsultado){
 
         // Comprobamos si el mueble ya existe en el historial (Ya hay una o varias referencias a él)
-        if(his.getMuebleList().contains(muebleConsultado)) {
-            // Antes de insertar la nueva referencia borramos la referencia existente del historial (Para que no se repitan referencias)
-            his.getMuebleList().removeAll(Collections.singleton(muebleConsultado));
+        for(Iterator iterator = his.getMuebleList().iterator(); iterator.hasNext();){
+            Mueble mueble = (Mueble) iterator.next();
+            if(mueble.getCodigoQr().equals(muebleConsultado.getCodigoQr())){
+                // Antes de insertar la nueva referencia borramos la referencia existente del historial (Para que no se repitan referencias)                iterator.remove();
+                iterator.remove();
+            }
         }
+
         // Se añade el id del mueble buscado a la lista
         his.getMuebleList().add(muebleConsultado);
         db.collection("historial").document(his.getIdentificador())
                 .update("muebleList", his.getMuebleList()).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(getActivity(), "DocumentSnapshot successfully updated!!", Toast.LENGTH_LONG).show();
+                        System.out.println("DocumentSnapshot successfully updated!!");
+//                        Toast.makeText(getActivity(), "DocumentSnapshot successfully updated!!", Toast.LENGTH_LONG).show();
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getActivity(), "Error updating document!!", Toast.LENGTH_LONG).show();
+                        System.out.println("Error updating document!!");
+//                        Toast.makeText(getActivity(), "Error updating document!!", Toast.LENGTH_LONG).show();
                     }
                 });
         }

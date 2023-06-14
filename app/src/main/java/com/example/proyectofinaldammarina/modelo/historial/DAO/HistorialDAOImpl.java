@@ -3,12 +3,15 @@ package com.example.proyectofinaldammarina.modelo.historial.DAO;
 import androidx.annotation.NonNull;
 
 import com.example.proyectofinaldammarina.modelo.historial.Historial;
+import com.example.proyectofinaldammarina.modelo.mueble.Mueble;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Esta clase implementa la interfaz específica
