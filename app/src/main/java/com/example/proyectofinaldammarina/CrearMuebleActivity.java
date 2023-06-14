@@ -39,6 +39,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Clase que permite crear un nuevo mueble
+ */
 public class CrearMuebleActivity extends AppCompatActivity {
 
     // Se declaran variables
@@ -65,12 +68,14 @@ public class CrearMuebleActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crear_mueble);
 
+        // Se inicializan las variables
         storage = FirebaseStorage.getInstance();
 
         db = FirebaseFirestore.getInstance();
 
         Bundle bundle = getIntent().getExtras();
 
+        // Se obtiene el id del mueble que la clase que llama a esta pasa (EscanerFragment)
         idMueble = bundle.getString("id");
 
         // Se asocian las variables con los elementos xml del layout asociado a este activity
@@ -90,6 +95,9 @@ public class CrearMuebleActivity extends AppCompatActivity {
 
         rellenarSpinnerZona();
 
+        /**
+         * Se controla el evento que sucede cuando se pulsa la imagen de subir una imagen
+         */
         imagenSubir.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -98,6 +106,9 @@ public class CrearMuebleActivity extends AppCompatActivity {
             }
         });
 
+        /**
+         * Se controla el evento que sucede cuando se pulsa el botón de guardar
+         */
         botonGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +118,9 @@ public class CrearMuebleActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Se obtiene una imagen de la galeria
+     */
     ActivityResultLauncher activityResultLauncher = registerForActivityResult(new ActivityResultContracts.GetContent(),
             new ActivityResultCallback<Uri>() {
                 @Override
@@ -118,9 +132,14 @@ public class CrearMuebleActivity extends AppCompatActivity {
                 }
             });
 
+    /**
+     * Método que crea un nuevo mueble con los datos introducidos si estos son correctos
+     */
     private void guardarDatos(){
+        // Se comprueba que los campos no estén vacíos
         if(datosRellenados()){
             StorageReference reference = storage.getReference().child("images/" + UUID.randomUUID().toString());
+            // Se añade la imagen primero
             reference.putFile(uriImagen).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -128,51 +147,38 @@ public class CrearMuebleActivity extends AppCompatActivity {
                         reference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                             @Override
                             public void onSuccess(Uri uri) {
-                                Toast.makeText(CrearMuebleActivity.this, "id" + uri.toString(), Toast.LENGTH_SHORT).show();
 
-                                /**
-                                 * falta estanteria y zona!!
-                                 */
                                 Mueble mueble = new Mueble(idMueble,  uri.toString(), nombre.getText().toString().trim(),
                                         Double.parseDouble(precio.getText().toString().trim()), medidas.getText().toString().trim() ,descripcion.getText().toString(), idEstanteria, idZona);
-
-                                /**
-                                 * ver si sobreescribe!, ponerlo en dao
-                                 */
                                 MuebleDAOImpl muebleDAO = new MuebleDAOImpl(db, "muebles");
+                                // Se crea el mueble
                                 muebleDAO.insertarMueble(mueble, CrearMuebleActivity.this);
                             }
                         });
 
                     }else{
-                        Toast.makeText(CrearMuebleActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        System.out.println(task.getException().getMessage());
                     }
                 }
             });
 
         }else{
-            /**
-             * usar alerta + cambiar todos campos si no es obligatorio spinners
-             */
-            Toast.makeText(CrearMuebleActivity.this, "Debe rellenar todos los campos", Toast.LENGTH_LONG).show();
+            Toast.makeText(CrearMuebleActivity.this, "Debe rellenar todos los campos.", Toast.LENGTH_LONG).show();
 
         }
 
 
     }
 
+    /**
+     * Método que comprueba que los datos que se van a introducir son correctos.
+     * @return boolean
+     */
     private boolean datosRellenados(){
         String nombreComprobar = nombre.getText().toString().trim();
-        /**
-         * comprobar porque es double
-         */
         String precioComprobar = precio.getText().toString().trim();
         String medidasComprobar = medidas.getText().toString().trim();
         String descripcionComprobar = descripcion.getText().toString().trim();
-
-        /**
-         * AÑADIR SPINNER SI ALGUNO NO PUEDE SER NULL!!
-         */
 
         if(nombreComprobar.isEmpty() || precioComprobar.isEmpty() || medidasComprobar.isEmpty()
                 || descripcionComprobar.isEmpty() || uriImagen == null){
@@ -182,6 +188,10 @@ public class CrearMuebleActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Método que carga en el spinner las estanterías que no están asociadas a un mueble (Cada estantería sólo puede
+     * estar asociada a un mueble)
+     */
     private void rellenarSpinnerEstanteria(){
 
         final List<Estanteria> list = new ArrayList<>();
@@ -195,7 +205,7 @@ public class CrearMuebleActivity extends AppCompatActivity {
                             for (QueryDocumentSnapshot document : task.getResult()) {
                                 Estanteria estanteria = document.toObject(Estanteria.class);
 
-                                //Muestra documentos en los que existe el campo estanteria de MUEBLE!! con el valor con el que se compara
+                                //Muestra documentos en los que existe el campo estanteria de mueble con el valor con el que se compara
                                 Query referenciasEstanterias = db.collection("muebles").whereEqualTo("estanteriaId", estanteria.getCodigo());
                                 List<Mueble> mueblesConEstanteria = new ArrayList<>();
 
@@ -206,12 +216,8 @@ public class CrearMuebleActivity extends AppCompatActivity {
                                             mueblesConEstanteria.clear();
                                             for (QueryDocumentSnapshot document : task.getResult()) {
                                                 Mueble mueble = document.toObject(Mueble.class);
-                                                //error:     java.lang.RuntimeException: Could not deserialize object. Can't convert object of type java.lang.String to type com.example.pruebaescanearqr.modelo.Estanteria (found in field 'estanteria')
                                                 mueblesConEstanteria.add(mueble);
-                                                System.out.println("Cod:" + mueble.toString());
-                                                // list.add(estanteriaRef);
                                             }
-                                            System.out.println(mueblesConEstanteria.size());
                                             if(mueblesConEstanteria.size() == 0){//La estanteria no esta asociada con ningun mueble
                                                 list.add(estanteria);
                                             }
@@ -219,10 +225,7 @@ public class CrearMuebleActivity extends AppCompatActivity {
                                     }
                                 });
                             }
-                            /**
-                             * añadir opcion vacia a la lista (si codigo == "")
-                             * IMPORTANTE, NO AÑADIR ESTANTERIAS CON CODIGO = "", SINO DEJARA DE SALIR
-                             */
+                            // Opcion por defecto
                             list.add(new Estanteria("Sin estanteria"));
 
                             //list tiene las estanterias que no están asociadas a ningun mueble
@@ -248,18 +251,11 @@ public class CrearMuebleActivity extends AppCompatActivity {
     }
 
     /**
-     * zona, 1:n #?
-     */
-
-    /**
-     * No hay que controlar que zona se repita, puede aparecer en varios muebles
+     * Método que selecciona las zonas existentes (No tiene restricción como las estanterías)
      */
     private void rellenarSpinnerZona(){
         List<ZonaExposicion> listZona = new ArrayList<>();
 
-        /**
-         * Quitar lo de la imagen???????????????
-         */
         db.collection("zonas")
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {

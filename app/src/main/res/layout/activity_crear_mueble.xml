@@ -8,7 +8,6 @@
     android:orientation="vertical"
     android:background="@drawable/fondo"
     tools:context=".DetalleMuebleActivity">
-<!--    probar a ver como se ve en otros moviles!! emuladores!-->
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
@@ -18,8 +17,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/toolbarCrearMueble"
                 android:background="@color/blue"
-                app:logo="@drawable/ic_baseline_historial"
-                app:title="Crear mueble"
+                app:logo="@drawable/ic_baseline_chair_24"
+                app:title="Creación de un nuevo mueble"
                 app:titleMarginStart="30dp"
                 android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:popupTheme="@style/Theme.AppCompat.Light"
@@ -84,7 +83,6 @@
                         android:textColor="@color/black"
                         />
 
-<!--                    tipo de dato que puede introducir, probar!!-->
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="60dp"
@@ -110,7 +108,6 @@
                         android:gravity="start|center_vertical"
                         android:textColor="@color/black"
                         />
-<!--                    descripcion, tener en cuenta hacer el input mas grande-->
                     <EditText
                         android:layout_width="match_parent"
                         android:layout_height="100dp"

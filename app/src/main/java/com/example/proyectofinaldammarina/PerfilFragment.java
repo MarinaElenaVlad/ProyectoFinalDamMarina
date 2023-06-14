@@ -49,10 +49,11 @@ import java.util.List;
 import java.util.UUID;
 
 /**
- * QUE PUEDAN CAMBIAR NOMBRE TAMBIEN!!
+ * Clase que contiene los datos del perfil del usuario
  */
 public class PerfilFragment extends Fragment {
 
+    // Se declaran variables
     private FirebaseFirestore db;
 
     private FirebaseAuth firebaseAuth;
@@ -78,9 +79,7 @@ public class PerfilFragment extends Fragment {
         // Inflate the layout for this fragment
         View root = inflater.inflate(R.layout.fragment_perfil, container, false);
 
-/**
- * PUEDO PONER ROL TAMBIEN + FOTO RELACIONADA, CORREO , NOMBRE, FOTO PERFIL + hola empleado/cliente (bienvenido a tienda/ trabajo/ informar funciones q tiene)
- */
+        // Se inicializan las variables
         db = FirebaseFirestore.getInstance();
 
         firebaseAuth = FirebaseAuth.getInstance();
@@ -139,7 +138,7 @@ public class PerfilFragment extends Fragment {
     ImageView imagenActualizar;
 
     /***
-     * controlar no insertar dos veces misma foto?? deselecciona y vuelve a seleccionar la misma??
+     * Método que actualiza el nombre y la foto de perfil del usuario
      */
     private void actualizarPerfil(){
         final Dialog dialog = new Dialog(getActivity());
@@ -174,13 +173,13 @@ public class PerfilFragment extends Fragment {
                                 });
 
                             }else{
-                                Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                System.out.println(task.getException().getMessage());
                             }
                         }
                     });
 
                 }else{
-                    Toast.makeText(getContext(), "Seleccione una nueva foto y/o escriba un nombre!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getContext(), "Seleccione una nueva foto y/o escriba un nuevo nombre!", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -194,10 +193,6 @@ public class PerfilFragment extends Fragment {
 
             }
         });
-
-        /**
-         * AL BORRAR FOTO QUE SE BORRE REFERENCIA (STORAGE)
-         */
 
         dialog.show();
         dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -216,5 +211,4 @@ public class PerfilFragment extends Fragment {
                     }
                 }
             });
-
 }

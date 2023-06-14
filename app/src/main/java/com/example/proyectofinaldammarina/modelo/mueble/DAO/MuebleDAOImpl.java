@@ -63,6 +63,11 @@ public class MuebleDAOImpl implements IMuebleDAO {
         });
     }
 
+    /**
+     * Método que inserta un mueble en la base de datos
+     * @param mueble
+     * @param context
+     */
     @Override
     public void insertarMueble(Mueble mueble, Context context) {
         DocumentReference docRef = database.collection(nombreColeccion).document(mueble.getCodigoQr());
@@ -71,15 +76,16 @@ public class MuebleDAOImpl implements IMuebleDAO {
                     @Override
                     public void onSuccess(Void aVoid) {
 
-                        Toast.makeText(context, "DocumentSnapshot successfully written!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Mueble creado con éxito!", Toast.LENGTH_SHORT).show();
                         Intent intent = new Intent(context, MenuActivity.class);
+                        // Se vuelve al menu
                         context.startActivity(intent);
                     }
                 })
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(context, "Error writing document!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context, "Error al crear mueble", Toast.LENGTH_SHORT).show();
                     }
                 });
     }

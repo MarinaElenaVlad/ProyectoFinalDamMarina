@@ -30,8 +30,14 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ *  Clase que extiende de RecyclerView.Adapter y que ayuda a personalizar
+ *  la forma en la que se muestran los items del recycler view del
+ *  historial
+ */
 public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.Vist> {
 
+    // Se declaran variables
     private Context context;
     private List<Mueble> muebles;
     ConstraintLayout filaHistorial;
@@ -39,6 +45,11 @@ public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.
     private FirebaseAuth firebaseAuth;
     private Historial historial;
 
+    /**
+     * Constructor con parámetros
+     * @param context
+     * @param muebles
+     */
     public AdaptadorHistorial(Context context, List<Mueble> muebles) {
         this.context = context;
         this.muebles = muebles;
@@ -61,8 +72,9 @@ public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.
     public void onBindViewHolder(@NonNull Vist holder, @SuppressLint("RecyclerView") int position) {
         holder.nombreMueble.setText("[" + muebles.get(position).getNombre() + "]");
 
-        System.out.println(muebles.get(position).toString());
-
+        /**
+         * Se controla el evento que sucede cuando se pulsa un elemento del historial
+         */
         filaHistorial.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -72,6 +84,7 @@ public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
                             Mueble mueble = document.toObject(Mueble.class);
+                            // Se vuelve a mostrar la comparación
                             Intent intent = new Intent(context, ComparacionMuebleActivity.class);
                             intent.putExtra("mueble", mueble);
                             context.startActivity(intent);
@@ -91,6 +104,9 @@ public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.
 
                             dialogoOk.show();
 
+                            /**
+                             * Si el mueble ya no existe es borrado cuando el usuario lo pulsa
+                             */
                             // 1º buscamos la lista del historial
                             db.collection("historial").whereEqualTo("usuario", firebaseAuth.getUid()).get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -138,7 +154,7 @@ public class AdaptadorHistorial extends RecyclerView.Adapter<AdaptadorHistorial.
     }
 
     public class Vist extends RecyclerView.ViewHolder {
-        TextView nombreMueble, otro;
+        TextView nombreMueble;
 
         public Vist(@NonNull View itemView) {
             super(itemView);

@@ -251,7 +251,7 @@ public class DetalleMuebleActivity extends AppCompatActivity {
                             .setPositiveButton("Sí, modificar", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
-                                    // Se crea un objecto de tipo mueble con los datos que no han cambiado (codigo, imagen y zona)
+                                    // Se crea un objecto de tipo mueble con los datos que no han cambiado (codigo, imagen, zona y estanteria)
                                     // y se recogen los datos que sí que se pueden cambiar desde el layout 'actualizar_mueble'
                                     Mueble mueb = new Mueble(bundle.getString("codigo"), bundle.getString("imagen"),
                                             nombreActualizar.getText().toString().trim(), Double.parseDouble(precioActualizar.getText().toString().trim()),
