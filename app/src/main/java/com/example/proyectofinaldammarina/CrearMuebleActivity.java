@@ -275,7 +275,6 @@ public class CrearMuebleActivity extends AppCompatActivity {
                                     //Se obtiene el código de la estantería seleccionada (pone lo del toString)
                                     ZonaExposicion zona = (ZonaExposicion) parent.getItemAtPosition(position);
                                     idZona = zona.getCodigo();
-                                    Toast.makeText(CrearMuebleActivity.this, idZona, Toast.LENGTH_SHORT).show();
                                 }
 
                                 @Override

@@ -1,11 +1,9 @@
-package com.example.proyectofinaldammarina.modelo.estanteria;
-
-import java.io.Serializable;
+package com.example.proyectofinaldammarina.modelo.pasillo;
 
 /**
- * Modelo de clase reflejo de la colección estanterias de FireStore Database
+ * Modelo de clase reflejo de la colección pasillos de FireStore Database
  */
-public class Estanteria implements Serializable {
+public class Pasillo {
 
     // Atributos
     private String codigo;
@@ -15,15 +13,7 @@ public class Estanteria implements Serializable {
     /**
      * Constructor sin parametros
      */
-    public Estanteria() {
-    }
-
-    /**
-     * Constructor con un parámetro
-     * @param codigo
-     */
-    public Estanteria(String codigo) {
-        this.codigo = codigo;
+    public Pasillo() {
     }
 
     /**
@@ -32,7 +22,7 @@ public class Estanteria implements Serializable {
      * @param cantMax
      * @param stock
      */
-    public Estanteria(String codigo, int cantMax, int stock) {
+    public Pasillo(String codigo, int cantMax, int stock) {
         this.codigo = codigo;
         this.cantMax = cantMax;
         this.stock = stock;
@@ -67,6 +57,10 @@ public class Estanteria implements Serializable {
 
     @Override
     public String toString() {
-        return codigo;
+        return "Pasillo{" +
+                "codigo='" + codigo + '\'' +
+                ", cantMax=" + cantMax +
+                ", stock=" + stock +
+                '}';
     }
 }

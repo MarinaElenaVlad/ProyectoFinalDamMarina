@@ -1,18 +1,30 @@
 package com.example.proyectofinaldammarina.modelo.zona;
 
+/**
+ * Modelo de clase reflejo de la colección zonas de FireStore Database
+ */
 public class ZonaExposicion {
 
+    // Atributos
     private String codigo;
     private String categoria;
 
     private String planta;
     private String imagen;
 
-    //constructor sin parametros
+    /**
+     * Constructor sin parametros
+     */
     public ZonaExposicion() {
     }
 
-    //constructor con parametros
+    /**
+     * Constructor con parámetros
+     * @param codigo
+     * @param categoria
+     * @param planta
+     * @param imagen
+     */
     public ZonaExposicion(String codigo, String categoria, String planta, String imagen) {
         this.codigo = codigo;
         this.categoria = categoria;
@@ -20,8 +32,9 @@ public class ZonaExposicion {
         this.imagen = imagen;
     }
 
-    //get y set
-
+    /**
+     * Métodos get y set de cada atributo
+     */
     public String getCodigo() {
         return codigo;
     }
